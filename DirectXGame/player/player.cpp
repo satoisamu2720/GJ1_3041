@@ -13,9 +13,6 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	worldTransform_.translation_ = position;
 
 	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
-
-	worldTransform_.translation_ = Add(worldTransform_.translation_, position);
-	worldTransform_.UpdateMatrix();
 }
 
 void Player::Update() {
@@ -53,17 +50,14 @@ void Player::Update() {
 	// ベクターの加算
 	worldTransform_.translation_ = Add(worldTransform_.translation_, move_); 
 	
+	worldTransform_.UpdateMatrix();
 
-
-#ifdef _DEBUG
-	//GUI表示
 #ifdef _DEBUG
 	// GUI表示
 	ImGui::Begin("Player");
 	ImGui::DragFloat3("Player Position", &worldTransform_.translation_.x, 0.01f);
 	ImGui::DragFloat3("Player Rotation", &worldTransform_.rotation_.x, 0.01f);
 	ImGui::End();
-#endif
 #endif
 }
 
@@ -73,6 +67,7 @@ void Player::Draw(ViewProjection& view) {
 }
 
 Vector3 Player::GetWorldPosition() {
+
 	Vector3 worldPos;
 
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
@@ -80,4 +75,4 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
 
 	return worldPos;
-};
+}

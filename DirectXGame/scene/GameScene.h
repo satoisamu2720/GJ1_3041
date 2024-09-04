@@ -7,9 +7,11 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "DebugCamera.h"
 
 #include "player/Player.h"
 #include "camera/FollowCamera.h"
+#include "ground/Ground.h"
 
 /// <summary>
 /// ゲームシーン
@@ -59,6 +61,13 @@ private: // メンバ変数
 	ViewProjection viewProjection_;
 
 	std::unique_ptr<FollowCamera> followCamera_;
+
+	std::unique_ptr<DebugCamera> debugCamera_;
+
+	bool isDebugCameraActive_ = false;
+
+	std::unique_ptr<Ground> ground_;
+	Model* modelGround_ = nullptr;
 
 	/// <summary>
 	/// ゲームシーン用

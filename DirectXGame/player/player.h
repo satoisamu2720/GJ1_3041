@@ -41,7 +41,11 @@ public:
 	// プレイヤー描画
 	void Draw(ViewProjection& view);
 
+
 	Vector3 GetWorldPosition();
+
+	const WorldTransform& GetWorldTransform()
+	{ return worldTransform_; }
 
 	void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 	void SetParent(const WorldTransform* parent) { worldTransform_.parent_ = parent; }

@@ -64,6 +64,9 @@
     <Filter Include="camera">
       <UniqueIdentifier>{eef6887b-a28e-46a0-ac61-20c3710ae028}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ground">
+      <UniqueIdentifier>{62ef47ff-dbe9-4141-8acc-523e9c8d98c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -95,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="camera\FollowCamera.cpp">
       <Filter>camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ground\Ground.cpp">
+      <Filter>ground</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="camera\FollowCamera.h">
       <Filter>camera</Filter>
+    </ClInclude>
+    <ClInclude Include="ground\Ground.h">
+      <Filter>ground</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

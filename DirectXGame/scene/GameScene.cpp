@@ -12,6 +12,8 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
 #pragma region プレイヤー初期
 
 	// 自キャラモデル読み込み
@@ -38,23 +40,57 @@ void GameScene::Initialize() {
 
 #pragma endregion
 
-	worldTransform_.Initialize();
-	viewProjection_.Initialize();
+#pragma region 地面初期
+
+	modelGround_ = Model::CreateFromOBJ("ground", true);
+	ground_ = std::make_unique<Ground>();
+	ground_->Initialize(modelGround_, {1.0f, 0.0f, 0.0f});
+
+#pragma endregion
+
+	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
+	
+
 }
 
 void GameScene::Update() { 
+
 	
-	//プレイヤー
-	player_->Update(); 
-	//カメラ
+
+	#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == false) {
+		isDebugCameraActive_ = true;
+	} else if (input_->TriggerKey(DIK_LSHIFT) && isDebugCameraActive_ == true) {
+		isDebugCameraActive_ = false;
+	}
+#endif
+
+	// カメラ処理
+	if (isDebugCameraActive_ == true) {
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の転送
+		viewProjection_.TransferMatrix();
+	} else {
+		followCamera_->Update();
+		// railCamera_->Update();
+
+		viewProjection_.matView = followCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+
+		/*viewProjection_.matView = railCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;*/
+		viewProjection_.TransferMatrix();
+	}
+	// プレイヤー
+	player_->Update();
+	// カメラ
 	followCamera_->Update();
+	// 地面
+	ground_->Update();
 
-	viewProjection_.matView = followCamera_->GetViewProjection().matView;
-	viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
-
-	viewProjection_.TransferMatrix();
-
-
+	
 }
 
 void GameScene::Draw() {
@@ -86,7 +122,10 @@ void GameScene::Draw() {
 
 	// 3Dオブジェクト描画後処理
 
+	//プレイヤー
 	player_->Draw(viewProjection_);
+	//地面
+	ground_->Draw(viewProjection_);
 
 	Model::PostDraw();
 #pragma endregion

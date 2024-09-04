@@ -14,12 +14,26 @@ void GameScene::Initialize() {
 
 #pragma region プレイヤー初期
 
+	// 自キャラモデル読み込み
+
+	modelPlayer_.reset(Model::CreateFromOBJ("float_Body", true));
+	
+	// 自キャラモデル配列
+	std::vector<Model*> playerModels = {
+	    modelPlayer_.get(),
+	};
+	// プレイヤー初期化
+	player_ = std::make_unique<Player>();
+	player_->Initialize(playerModels);
 
 #pragma endregion
 
+
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
 }
 
-void GameScene::Update() {}
+void GameScene::Update() { player_->Update(); }
 
 void GameScene::Draw() {
 
@@ -49,6 +63,9 @@ void GameScene::Draw() {
 	/// </summary>
 
 	// 3Dオブジェクト描画後処理
+
+	player_->Draw(viewProjection_);
+
 	Model::PostDraw();
 #pragma endregion
 

@@ -11,6 +11,12 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
+#pragma region プレイヤー初期
+
+
+#pragma endregion
+
 }
 
 void GameScene::Update() {}

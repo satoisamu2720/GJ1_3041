@@ -28,12 +28,34 @@ void GameScene::Initialize() {
 
 #pragma endregion
 
+#pragma region カメラ初期
+
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+	followCamera_->SetTarget(&player_->GetWorldTransform());
+
+	player_->SetViewProjection(&followCamera_->GetViewProjection());
+
+#pragma endregion
 
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 }
 
-void GameScene::Update() { player_->Update(); }
+void GameScene::Update() { 
+	
+	//プレイヤー
+	player_->Update(); 
+	//カメラ
+	followCamera_->Update();
+
+	viewProjection_.matView = followCamera_->GetViewProjection().matView;
+	viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
+
+	viewProjection_.TransferMatrix();
+
+
+}
 
 void GameScene::Draw() {
 

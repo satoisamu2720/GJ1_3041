@@ -110,6 +110,7 @@
     <ClCompile Include="baseCharacter\BaseCharacter.cpp" />
     <ClCompile Include="base\DirectXCommon.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
+    <ClCompile Include="camera\FollowCamera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MT\MT.cpp" />
     <ClCompile Include="MT\WorldTransform.EX.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="base\StringUtility.h" />
     <ClInclude Include="base\TextureManager.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="camera\FollowCamera.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />

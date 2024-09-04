@@ -61,6 +61,9 @@
     <Filter Include="baseCharacter">
       <UniqueIdentifier>{ea911151-e807-4eec-9bfd-43e4e364aa18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="camera">
+      <UniqueIdentifier>{eef6887b-a28e-46a0-ac61-20c3710ae028}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -89,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="player\Player.cpp">
       <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\FollowCamera.cpp">
+      <Filter>camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="player\Player.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\FollowCamera.h">
+      <Filter>camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

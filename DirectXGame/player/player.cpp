@@ -41,17 +41,29 @@ void Player::Update() {
 	} else if (input_->PushKey(DIK_D)) {
 		move_.x += playerSpeed;
 	}
+	if (input_->PushKey(DIK_W)) {
+		move_.z += playerSpeed;
+	} else if (input_->PushKey(DIK_S)) {
+		move_.z -= playerSpeed;
+	}
 
-
-	worldTransform_.translation_ = Add(worldTransform_.translation_, move_);
 	move_ = TransformNormal(move_, MakeRotateYmatrix(viewProjection_->rotation_.y));
+	// Y軸周り角度
+	worldTransform_.rotation_.y = std::atan2(move_.x, move_.z);
+	// ベクターの加算
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move_); 
 	
-	worldTransform_.UpdateMatrix();
 
 
 #ifdef _DEBUG
 	//GUI表示
-
+#ifdef _DEBUG
+	// GUI表示
+	ImGui::Begin("Player");
+	ImGui::DragFloat3("Player Position", &worldTransform_.translation_.x, 0.01f);
+	ImGui::DragFloat3("Player Rotation", &worldTransform_.rotation_.x, 0.01f);
+	ImGui::End();
+#endif
 #endif
 }
 

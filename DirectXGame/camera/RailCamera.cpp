@@ -8,27 +8,40 @@ void RailCamera::Initialize(const Vector3& position, const Vector3& rotation) {
 
 	input_ = Input::GetInstance();
 
+	degree = position_;
+
+	rotf = DirectX::XMConvertToRadians(degree);
+
 }
 
 void RailCamera::Update() {
 	
 	// 追従対象からカメラまでのオフセット
-	Vector3 offset_ = {0.0f, 2.0f, -10.0f};
+	Vector3 offset_ = {0.0f, 2.0f, -30.0f};
 	if (target_) {
 
 		float kRotSpeed = 0.04f;
 
-		if (input_->PushKey(DIK_D)) {
-			offset_.y -= kRotSpeed;
-		} else if (input_->PushKey(DIK_A)) {
-			offset_.y += kRotSpeed;
+		if (input_->PushKey(DIK_LEFT) && leftFlag_ == false && rightFlag_ == false || input_->PushKey(DIK_A)) {
+			degree -= move_;
+			rotf = DirectX::XMConvertToRadians(degree);
+			leftFlag_ = true;
+			
+		} else {
+			leftFlag_ = false;
 		}
 
-		if (viewProjection_.rotation_.y > 3.14f) {
-			viewProjection_.rotation_.y = -3.14f;
-		} else if (viewProjection_.rotation_.y <= -3.14f) {
-			viewProjection_.rotation_.y = 3.14f;
+		if (input_->PushKey(DIK_RIGHT) && leftFlag_ == false && rightFlag_ == false || input_->PushKey(DIK_D)) {
+			degree += move_;
+			rotf = DirectX::XMConvertToRadians(degree);
+			rightFlag_ = true;
+		} else {
+			rightFlag_ = false;
 		}
+
+		viewProjection_.translation_.x = -cosf(rotf) * 10.0f;
+		viewProjection_.translation_.z = -sinf(rotf) * 10.0f;
+	
 
 		// 押した方向で移動ベクトルを変更（上下）
 		if (input_->PushKey(DIK_UP)) {

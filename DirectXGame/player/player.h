@@ -20,7 +20,10 @@ class Player : public BaseCharacter {
 private:
 	WorldTransform worldTransform_;
 
+	
 	float move_ = 0.04f;
+
+	Vector3 position = {0, -2.0f, 8.0f};
 
 	// キャラクターの移動速度
 	const float playerSpeed = 0.5f;
@@ -33,22 +36,12 @@ private:
 	bool leftFlag_ = false;
 	bool rightFlag_ = false;
 
-	bool selectSwitchFlag = true;
-	float selectSwitchTimer = 120;
-
 	// 回転の処理
 	float degree;
 	float rotf;
 
-	// 移動を管理する変数
-	int target_ = 0;
-
 	// 初期ポジション
 	float position_ = 90;
-	// 　矢印を押したときの番号
-	int stageCount_ = 0;
-
-
 public:
 	// プレイヤー初期化
 	void Initialize(const std::vector<Model*>& models);

@@ -12,16 +12,18 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	// 初期ポジティブ
 	//worldTransform_.translation_ = position;
 
-	degree = position_;
+	/*degree = position_;
 
-	rotf = DirectX::XMConvertToRadians(degree);
+	rotf = DirectX::XMConvertToRadians(degree);*/
+
+	worldTransform_.translation_ = position;
 
 	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 }
 
 void Player::Update() {
 
-	
+	Vector3 move{0,0,0};
 
 	XINPUT_STATE joyState;
 
@@ -43,7 +45,13 @@ void Player::Update() {
 		rightFlag_ = false;
 	}
 
-	if (input_->PushKey(DIK_LEFT) && leftFlag_ == false && rightFlag_ == false || input_->PushKey(DIK_A) ) {
+	if (input_->PushKey(DIK_I)) {
+		move.z += playerSpeed;
+	} else if (input_->PushKey(DIK_K)) {
+		move.z -= playerSpeed;
+	}
+
+	/*if (input_->PushKey(DIK_LEFT) && leftFlag_ == false && rightFlag_ == false || input_->PushKey(DIK_A) ) {
 		degree -= move_;
 		rotf = DirectX::XMConvertToRadians(degree);
 		leftFlag_ = true;
@@ -62,14 +70,14 @@ void Player::Update() {
 	}
 
 	worldTransform_.translation_.x = -cosf(rotf) * 10.0f;
-	worldTransform_.translation_.z = -sinf(rotf) * 10.0f;
+	worldTransform_.translation_.z = -sinf(rotf) * 10.0f;*/
 	
 
-	worldTransform_.translation_ = TransformNormal(worldTransform_.translation_, MakeRotateYmatrix(viewProjection_->rotation_.y));
+	move = TransformNormal(move, MakeRotateYmatrix(viewProjection_->rotation_.y));
 	// Y軸周り角度
 	worldTransform_.rotation_.y = std::atan2(worldTransform_.translation_.x, worldTransform_.translation_.z);
 	// ベクターの加算
-	worldTransform_.translation_ = Add(worldTransform_.translation_, worldTransform_.translation_); 
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move); 
 	
 	worldTransform_.UpdateMatrix();
 

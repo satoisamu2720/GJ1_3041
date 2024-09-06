@@ -47,7 +47,7 @@ void Player::Update() {
 		degree -= move_;
 		rotf = DirectX::XMConvertToRadians(degree);
 		leftFlag_ = true;
-		worldTransform_.rotation_.y = 0.1f;
+		
 	} 
 	else {
 		leftFlag_ = false;
@@ -61,6 +61,11 @@ void Player::Update() {
 		rightFlag_ = false;
 	}
 
+	if (input_->PushKey(DIK_UP) || input_->PushKey(DIK_W)) {
+		worldTransform_.translation_.y += 0.1f;
+		
+	} 
+
 	worldTransform_.translation_.x = -cosf(rotf) * 10.0f;
 	worldTransform_.translation_.z = -sinf(rotf) * 10.0f;
 	
@@ -70,6 +75,7 @@ void Player::Update() {
 	worldTransform_.rotation_.y = std::atan2(worldTransform_.translation_.x, worldTransform_.translation_.z);
 	// ベクターの加算
 	worldTransform_.translation_ = Add(worldTransform_.translation_, worldTransform_.translation_); 
+	
 	
 	worldTransform_.UpdateMatrix();
 

@@ -17,12 +17,12 @@ void FollowCamera::Update() {
 	if (target_) {
 		
 
-		 float kRotSpeed = 0.04f;
+		 float kRotSpeed = 0.01f;
 
 		if (input_->PushKey(DIK_D)) {
-			 offset_.y -= kRotSpeed;
+			 viewProjection_.rotation_.y -= kRotSpeed;
 		} else if (input_->PushKey(DIK_A)) {
-			 offset_.y += kRotSpeed;
+			 viewProjection_.rotation_.y += kRotSpeed;
 		}
 
 		if (viewProjection_.rotation_.y > 3.14f) {
@@ -37,8 +37,8 @@ void FollowCamera::Update() {
 		} else if (input_->PushKey(DIK_DOWN)) {
 			viewProjection_.rotation_.x -= kRotSpeed;
 		}
-		/*rotateYMatrix_ = MakeRotateYmatrix(viewProjection_.rotation_.y);
-		offset_ = TransformNormal(offset_, rotateYMatrix_);*/
+		rotateYMatrix_ = MakeRotateYmatrix(viewProjection_.rotation_.y);
+		offset_ = TransformNormal(offset_, rotateYMatrix_);
 		// 座標をコピーしてオフセット分ずらす
 		viewProjection_.translation_ = Add(target_->translation_, offset_);
 		

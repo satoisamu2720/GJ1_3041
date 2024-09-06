@@ -12,6 +12,7 @@
 #include "player/Player.h"
 #include "camera/FollowCamera.h"
 #include "ground/Ground.h"
+#include "pillar/Pillar.h"
 
 /// <summary>
 /// ゲームシーン
@@ -52,6 +53,13 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelPlayer_;
 	std::list<Player*> players_;
 
+	//地面
+	std::unique_ptr<Ground> ground_;
+	Model* modelGround_ = nullptr;
+
+	//柱
+	std::unique_ptr<Pillar> pillar_;
+	Model* modelPillar_ = nullptr;
 
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -66,8 +74,8 @@ private: // メンバ変数
 
 	bool isDebugCameraActive_ = false;
 
-	std::unique_ptr<Ground> ground_;
-	Model* modelGround_ = nullptr;
+
+
 
 	/// <summary>
 	/// ゲームシーン用

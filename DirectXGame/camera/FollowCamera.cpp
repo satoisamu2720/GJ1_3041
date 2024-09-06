@@ -17,21 +17,28 @@ void FollowCamera::Update() {
 	if (target_) {
 		
 
-		// float kRotSpeed = 0.05f;
+		 float kRotSpeed = 0.04f;
 
-		//if (input_->PushKey(DIK_LEFT)) {
-		//	viewProjection_.rotation_.y -= kRotSpeed;
-		//} else if (input_->PushKey(DIK_RIGHT)) {
-		//	viewProjection_.rotation_.y += kRotSpeed;
-		//}
-		//// 押した方向で移動ベクトルを変更（上下）
-		//if (input_->PushKey(DIK_UP)) {
-		//	viewProjection_.rotation_.x += kRotSpeed;
-		//} else if (input_->PushKey(DIK_DOWN)) {
-		//	viewProjection_.rotation_.x -= kRotSpeed;
-		//}
-		rotateYMatrix_ = MakeRotateYmatrix(viewProjection_.rotation_.y);
-		offset_ = TransformNormal(offset_, rotateYMatrix_);
+		if (input_->PushKey(DIK_D)) {
+			 offset_.y -= kRotSpeed;
+		} else if (input_->PushKey(DIK_A)) {
+			 offset_.y += kRotSpeed;
+		}
+
+		if (viewProjection_.rotation_.y > 3.14f) {
+			viewProjection_.rotation_.y = -3.14f;
+		} else if (viewProjection_.rotation_.y <= -3.14f) {
+			viewProjection_.rotation_.y = 3.14f;
+		}
+
+		// 押した方向で移動ベクトルを変更（上下）
+		if (input_->PushKey(DIK_UP)) {
+			viewProjection_.rotation_.x += kRotSpeed;
+		} else if (input_->PushKey(DIK_DOWN)) {
+			viewProjection_.rotation_.x -= kRotSpeed;
+		}
+		/*rotateYMatrix_ = MakeRotateYmatrix(viewProjection_.rotation_.y);
+		offset_ = TransformNormal(offset_, rotateYMatrix_);*/
 		// 座標をコピーしてオフセット分ずらす
 		viewProjection_.translation_ = Add(target_->translation_, offset_);
 		

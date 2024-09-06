@@ -115,6 +115,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MT\MT.cpp" />
     <ClCompile Include="MT\WorldTransform.EX.cpp" />
+    <ClCompile Include="pillar\Pillar.cpp" />
     <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
     <ClInclude Include="MT\MT.h" />
+    <ClInclude Include="pillar\Pillar.h" />
     <ClInclude Include="player\Player.h" />
     <ClInclude Include="scene\GameScene.h" />
   </ItemGroup>

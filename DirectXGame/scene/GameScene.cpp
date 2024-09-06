@@ -48,6 +48,15 @@ void GameScene::Initialize() {
 
 #pragma endregion
 
+
+#pragma region 柱初期化
+
+	modelPillar_ = Model::CreateFromOBJ("pillar", true);
+	pillar_ = std::make_unique<Pillar>();
+	pillar_->Initialize(modelPillar_, {1.0f, 0.0f, 0.0f});
+
+#pragma endregion
+
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	
 
@@ -73,22 +82,18 @@ void GameScene::Update() {
 		// ビュープロジェクション行列の転送
 		viewProjection_.TransferMatrix();
 	} else {
-		followCamera_->Update();
-		// railCamera_->Update();
 
+		followCamera_->Update();
 		viewProjection_.matView = followCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
-
-		/*viewProjection_.matView = railCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;*/
 		viewProjection_.TransferMatrix();
 	}
 	// プレイヤー
 	player_->Update();
-	// カメラ
-	followCamera_->Update();
 	// 地面
 	ground_->Update();
+	// 柱
+	pillar_->Update();
 
 	
 }
@@ -126,6 +131,8 @@ void GameScene::Draw() {
 	player_->Draw(viewProjection_);
 	//地面
 	ground_->Draw(viewProjection_);
+	//柱
+	pillar_->Draw(viewProjection_);
 
 	Model::PostDraw();
 #pragma endregion

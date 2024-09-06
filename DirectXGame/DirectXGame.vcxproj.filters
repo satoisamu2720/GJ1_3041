@@ -67,6 +67,9 @@
     <Filter Include="ground">
       <UniqueIdentifier>{62ef47ff-dbe9-4141-8acc-523e9c8d98c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="pillar">
+      <UniqueIdentifier>{30be11ed-7874-44bc-bbaa-40174ff8e19a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="ground\Ground.cpp">
       <Filter>ground</Filter>
+    </ClCompile>
+    <ClCompile Include="pillar\Pillar.cpp">
+      <Filter>pillar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="ground\Ground.h">
       <Filter>ground</Filter>
+    </ClInclude>
+    <ClInclude Include="pillar\Pillar.h">
+      <Filter>pillar</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

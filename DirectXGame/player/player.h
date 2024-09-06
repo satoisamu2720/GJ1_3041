@@ -13,15 +13,14 @@
 #include <list>
 #include <optional>
 #include <stdio.h>
+#include <DirectXMath.h>
 
 class Player : public BaseCharacter {
 
 private:
 	WorldTransform worldTransform_;
 
-	Vector3 position = {0.0f, 0.0f, 0.0f};
-
-	Vector3 move_ = {0, 0, 0};
+	float move_ = 0.04f;
 
 	// キャラクターの移動速度
 	const float playerSpeed = 0.5f;
@@ -29,6 +28,25 @@ private:
 	Input* input_ = nullptr;
 
 	const ViewProjection* viewProjection_ = nullptr;
+
+	// 左右のキーを押したときのフラグ
+	bool leftFlag_ = false;
+	bool rightFlag_ = false;
+
+	bool selectSwitchFlag = true;
+	float selectSwitchTimer = 120;
+
+	// 回転の処理
+	float degree;
+	float rotf;
+
+	// 移動を管理する変数
+	int target_ = 0;
+
+	// 初期ポジション
+	float position_ = 90;
+	// 　矢印を押したときの番号
+	int stageCount_ = 0;
 
 
 public:
@@ -51,4 +69,6 @@ public:
 	void SetParent(const WorldTransform* parent) { worldTransform_.parent_ = parent; }
 
 	~Player();
+
+
 };

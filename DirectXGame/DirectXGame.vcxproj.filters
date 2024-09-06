@@ -108,6 +108,9 @@
     <ClCompile Include="pillar\Pillar.cpp">
       <Filter>pillar</Filter>
     </ClCompile>
+    <ClCompile Include="camera\RailCamera.cpp">
+      <Filter>camera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\ViewProjection.h">
@@ -214,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="pillar\Pillar.h">
       <Filter>pillar</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\RailCamera.h">
+      <Filter>camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

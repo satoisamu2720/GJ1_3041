@@ -32,11 +32,22 @@ void GameScene::Initialize() {
 
 #pragma region カメラ初期
 
-	followCamera_ = std::make_unique<FollowCamera>();
+	/*followCamera_ = std::make_unique<FollowCamera>();
 	followCamera_->Initialize({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
 	followCamera_->SetTarget(&player_->GetWorldTransform());
 
-	player_->SetViewProjection(&followCamera_->GetViewProjection());
+	player_->SetViewProjection(&followCamera_->GetViewProjection());*/
+
+
+	// レールカメラ初期化
+	railCamera_ = std::make_unique<RailCamera>();
+	railCamera_->Initialize({0.0f, 4.0f, 10.0f}, {0.0f, 0.0f, 0.0f});
+	railCamera_->SetTarget(&player_->GetWorldTransform());
+	// 追従対象をプレイヤーに
+	player_->SetParent(&railCamera_->GetWorldTransform());
+	player_->SetViewProjection(&railCamera_->GetViewProjection());
+
+
 
 #pragma endregion
 
@@ -83,10 +94,16 @@ void GameScene::Update() {
 		viewProjection_.TransferMatrix();
 	} else {
 
-		followCamera_->Update();
+		railCamera_->Update();
+		viewProjection_.matView = railCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = railCamera_->GetViewProjection().matProjection;
+		viewProjection_.TransferMatrix();
+
+
+		/*followCamera_->Update();
 		viewProjection_.matView = followCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = followCamera_->GetViewProjection().matProjection;
-		viewProjection_.TransferMatrix();
+		viewProjection_.TransferMatrix();*/
 	}
 	// プレイヤー
 	player_->Update();

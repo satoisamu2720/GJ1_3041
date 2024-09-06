@@ -11,6 +11,7 @@
 
 #include "player/Player.h"
 #include "camera/FollowCamera.h"
+#include "camera/railCamera.h"
 #include "ground/Ground.h"
 #include "pillar/Pillar.h"
 
@@ -71,6 +72,9 @@ private: // メンバ変数
 	std::unique_ptr<FollowCamera> followCamera_;
 
 	std::unique_ptr<DebugCamera> debugCamera_;
+
+	std::unique_ptr<RailCamera> railCamera_;
+
 
 	bool isDebugCameraActive_ = false;
 

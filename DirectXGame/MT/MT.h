@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Matrix4x4.h"
 #include "Vector3.h"
 #include <assert.h>
@@ -123,3 +123,5 @@ Vector3 Transform(const Vector3& vector, const Matrix4x4& matrix);
 const Vector3 GetBezierCurve(const Vector3 p1, const Vector3 p2, const Vector3 p3, float t);
 
 Vector3 TrianglePositionXZ(Vector3 p1, Vector3 p2);
+
+float ToRadian(int degree);

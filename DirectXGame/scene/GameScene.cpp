@@ -19,10 +19,16 @@ void GameScene::Initialize() {
 	// 自キャラモデル読み込み
 
 	modelPlayer_.reset(Model::CreateFromOBJ("float_Body", true));
+	body_.reset(Model::CreateFromOBJ("body", true));
+	leg_.reset(Model::CreateFromOBJ("Leg", true));
+	hand_.reset(Model::CreateFromOBJ("Hand", true));
+
 	
 	// 自キャラモデル配列
 	std::vector<Model*> playerModels = {
-	    modelPlayer_.get(),
+	    body_.get(),
+	    leg_.get(), 
+		hand_.get(),
 	};
 	// プレイヤー初期化
 	player_ = std::make_unique<Player>();

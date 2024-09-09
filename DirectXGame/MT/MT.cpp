@@ -1,4 +1,4 @@
-﻿#include "MT.h"
+#include "MT.h"
 #include <math.h>
 
 Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
@@ -404,3 +404,5 @@ Vector3 TrianglePositionXZ(Vector3 p1, Vector3 p2) {
 
 	return result;
 }
+
+float ToRadian(int degree) { return (float)degree * (3.14f / 180.0f); }

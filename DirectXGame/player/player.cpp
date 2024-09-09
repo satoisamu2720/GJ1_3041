@@ -1,5 +1,7 @@
 #include "Player.h"
 
+#define LEG_ROTATE_MAX 30
+
 Player::~Player() {}
 
 void Player::Initialize(const std::vector<Model*>& models) {
@@ -16,7 +18,40 @@ void Player::Initialize(const std::vector<Model*>& models) {
 
 	rotf = DirectX::XMConvertToRadians(degree);
 
-	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransform_.scale_ = {0.2f, 0.2f, 0.2f};
+
+	worldTransforms_[static_cast<int>(Parts::kBody)].parent_ = &worldTransform_;
+	worldTransforms_[static_cast<int>(Parts::kRootLeftLeg)].parent_ = &worldTransforms_[static_cast<int>(Parts::kBody)];
+	worldTransforms_[static_cast<int>(Parts::kRootRightLeg)].parent_ = &worldTransforms_[static_cast<int>(Parts::kBody)];
+
+	worldTransforms_[static_cast<int>(Parts::kLeftLeg)].parent_ = &worldTransforms_[static_cast<int>(Parts::kRootLeftLeg)];
+	worldTransforms_[static_cast<int>(Parts::kRightLeg)].parent_ = &worldTransforms_[static_cast<int>(Parts::kRootRightLeg)];
+
+	// 手
+	worldTransforms_[static_cast<int>(Parts::kRootLeftHand)].parent_ = &worldTransforms_[static_cast<int>(Parts::kBody)];
+	worldTransforms_[static_cast<int>(Parts::kRootRightHand)].parent_ = &worldTransforms_[static_cast<int>(Parts::kBody)];
+	worldTransforms_[static_cast<int>(Parts::kLeftHand)].parent_ = &worldTransforms_[static_cast<int>(Parts::kRootLeftHand)];
+	worldTransforms_[static_cast<int>(Parts::kRightHand)].parent_ = &worldTransforms_[static_cast<int>(Parts::kRootRightHand)];
+
+	for (int i = 0; i < (int)Parts::kMaxParts; i++) {
+		// 定数バッファ作成、これ呼ばないとTranferMatrixでエラーが起きる
+		worldTransforms_[i].Initialize();
+	}
+
+	worldTransforms_[static_cast<int>(Parts::kBody)].translation_ = {0, 7.7f, 0};
+	
+	worldTransforms_[static_cast<int>(Parts::kLeftLeg)].translation_ = {0.0f, -3.0f, 0.0f};
+	worldTransforms_[static_cast<int>(Parts::kRightLeg)].translation_ = {0.0f, -3.0f, 0.0f};
+	worldTransforms_[static_cast<int>(Parts::kRootLeftLeg)].translation_ = {2.0f, -3.0f, 0.0f};
+	worldTransforms_[static_cast<int>(Parts::kRootRightLeg)].translation_ = {-2.0f, -3.0f, 0.0f};
+
+	worldTransforms_[static_cast<int>(Parts::kLeftHand)].translation_ = {1.0f, -0.5f, 0.0f};
+	worldTransforms_[static_cast<int>(Parts::kRightHand)].translation_ = {-1.0f, -0.5f, 0.0f};
+	worldTransforms_[static_cast<int>(Parts::kRootLeftHand)].translation_ = {2.0f, -0.5f, 0.0f};
+	worldTransforms_[static_cast<int>(Parts::kRootRightHand)].translation_ = {-2.0f, -0.5f, 0.0f};
+
+	worldTransforms_[static_cast<int>(Parts::kRootRightHand)].rotation_ = {0.0f, 0.0f, ToRadian(-20)};
+	worldTransforms_[static_cast<int>(Parts::kRootLeftHand)].rotation_ = {0.0f, 0.0f, ToRadian(20)};
 }
 
 void Player::Update() {
@@ -79,6 +114,28 @@ void Player::Update() {
 	
 	worldTransform_.UpdateMatrix();
 
+	worldTransforms_[static_cast<int>(Parts::kRootLeftLeg)].rotation_.x = ToRadian(leftLegRotate_);
+	worldTransforms_[static_cast<int>(Parts::kRootRightLeg)].rotation_.x = ToRadian(-leftLegRotate_);
+
+	worldTransforms_[static_cast<int>(Parts::kRootLeftHand)].rotation_.x = ToRadian(-leftHandRotate_);
+	worldTransforms_[static_cast<int>(Parts::kRootRightHand)].rotation_.x = ToRadian(leftHandRotate_);
+
+	// 足
+	leftLegRotate_ += rotationSpeed_; // leftLegRotate_ = leftLegRotate_ + rotationSpeed_
+	if (leftLegRotate_ >= LEG_ROTATE_MAX || leftLegRotate_ <= -LEG_ROTATE_MAX) {
+		rotationSpeed_ = -rotationSpeed_;
+	}
+
+	// 手
+	leftHandRotate_ += rotationSpeed_; // leftHandRotate_ = leftHandRotate_ + rotationSpeed_
+	
+	for (int i = 0; i < (int)Parts::kMaxParts; i++) {
+		// アフィン変換 -> 回転や拡大縮小、平行移動行うための行列
+		// worldTransformのrotation,translation,scale
+		// アフィン変換してワールド行列計算、ワールド行列を転送
+		worldTransforms_[i].UpdateMatrix();
+	}
+
 #ifdef _DEBUG
 	// GUI表示
 	ImGui::Begin("Player");
@@ -90,7 +147,11 @@ void Player::Update() {
 
 void Player::Draw(ViewProjection& view) {
 
-	models_[0]->Draw(worldTransform_, view);
+	models_[0]->Draw(worldTransforms_[static_cast<int>(Parts::kBody)], view);
+	models_[1]->Draw(worldTransforms_[static_cast<int>(Parts::kRightLeg)], view);
+	models_[1]->Draw(worldTransforms_[static_cast<int>(Parts::kLeftLeg)], view);
+	models_[2]->Draw(worldTransforms_[static_cast<int>(Parts::kRightHand)], view);
+	models_[2]->Draw(worldTransforms_[static_cast<int>(Parts::kLeftHand)], view);
 }
 
 Vector3 Player::GetWorldPosition() {

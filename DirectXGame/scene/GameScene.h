@@ -52,6 +52,9 @@ private: // メンバ変数
 	std::unique_ptr<Player> player_;
 	std::unique_ptr<Model> modelPlayer_;
 	std::list<Player*> players_;
+	std::unique_ptr<Model> body_ = nullptr;
+	std::unique_ptr<Model> leg_ = nullptr;
+	std::unique_ptr<Model> hand_ = nullptr;
 
 	//地面
 	std::unique_ptr<Ground> ground_;

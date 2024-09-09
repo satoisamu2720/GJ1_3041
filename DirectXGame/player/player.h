@@ -48,6 +48,28 @@ private:
 	// 　矢印を押したときの番号
 	int stageCount_ = 0;
 
+	enum class Parts {
+		kBody,
+
+		kRootLeftLeg,
+		kRootRightLeg,
+		kLeftLeg,
+		kRightLeg,
+
+		kRootLeftHand,
+		kRootRightHand,
+		kLeftHand,
+		kRightHand,
+
+		kMaxParts,
+	};
+
+	WorldTransform worldTransforms_[(int)Parts::kMaxParts];
+	int32_t leftLegRotate_ = 0u;
+	int32_t rightLegRotate_ = 0u;
+	int32_t leftHandRotate_ = 0u;
+	int32_t rightHandRotate_ = 0u;
+	int32_t rotationSpeed_ = 1;
 
 public:
 	// プレイヤー初期化
@@ -59,7 +81,6 @@ public:
 	// プレイヤー描画
 	void Draw(ViewProjection& view);
 
-
 	Vector3 GetWorldPosition();
 
 	const WorldTransform& GetWorldTransform()
@@ -67,6 +88,7 @@ public:
 
 	void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 	void SetParent(const WorldTransform* parent) { worldTransform_.parent_ = parent; }
+
 
 	~Player();
 

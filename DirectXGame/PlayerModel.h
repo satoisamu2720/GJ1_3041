@@ -20,4 +20,26 @@ public:
 	/// </summary>
 	void Draw();
 
+
+private:
+	enum class Pats {
+		kBody,
+
+		kRootLeftLeg,
+		kRootRightLeg,
+		kLeftLeg,
+		kRightLeg,
+
+		kRootLeftHand,
+		kRootRightHand,
+		kLeftHand,
+		kRightHand,
+
+		kMaxParts,
+	};
+
+	
+
+
+
 };

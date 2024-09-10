@@ -20,7 +20,7 @@ class Player : public BaseCharacter {
 private:
 	WorldTransform worldTransform_;
 
-	float move_ = 0.01f;
+	
 
 	// キャラクターの移動速度
 	const float playerSpeed = 0.5f;

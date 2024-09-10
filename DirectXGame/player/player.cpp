@@ -21,13 +21,14 @@ void Player::Initialize(const std::vector<Model*>& models) {
 
 void Player::Update() {
 
+	Vector3 move_ = {0, 0, 0};
 	
 
 	XINPUT_STATE joyState;
 
 	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
 		// 押した方向で移動ベクトルを変更（左右）
-		degree -= move_;
+		degree -= playerSpeed;
 		rotf = DirectX::XMConvertToRadians(degree);
 		leftFlag_ = true;
 		worldTransform_.rotation_.y = 0.1f;
@@ -36,7 +37,7 @@ void Player::Update() {
 	}
 	
 	if (joyState.Gamepad.sThumbLX > 100) {
-		degree += move_;
+		degree += playerSpeed;
 		rotf = DirectX::XMConvertToRadians(degree);
 		rightFlag_ = true;
 	} else {
@@ -44,7 +45,7 @@ void Player::Update() {
 	}
 
 	if (input_->PushKey(DIK_LEFT) && leftFlag_ == false && rightFlag_ == false || input_->PushKey(DIK_A) ) {
-		degree -= move_;
+		degree -= playerSpeed;
 		rotf = DirectX::XMConvertToRadians(degree);
 		leftFlag_ = true;
 		
@@ -54,7 +55,7 @@ void Player::Update() {
 	}
 
 	if (input_->PushKey(DIK_RIGHT) && leftFlag_ == false && rightFlag_ == false || input_->PushKey(DIK_D)) {
-		degree += move_;
+		degree += playerSpeed;
 		rotf = DirectX::XMConvertToRadians(degree);
 		rightFlag_ = true;
 	} else {
@@ -62,21 +63,26 @@ void Player::Update() {
 	}
 
 	if (input_->PushKey(DIK_UP) || input_->PushKey(DIK_W)) {
-		worldTransform_.translation_.y += 0.1f;
+		move_.y += 0.1f;
 		
 	} 
 
-	worldTransform_.translation_.x = -cosf(rotf) * 10.0f;
-	worldTransform_.translation_.z = -sinf(rotf) * 10.0f;
+	
 	
 
-	worldTransform_.translation_ = TransformNormal(worldTransform_.translation_, MakeRotateYmatrix(viewProjection_->rotation_.y));
+	move_ = TransformNormal(move_, MakeRotateYmatrix(viewProjection_->rotation_.y));
 	// Y軸周り角度
 	worldTransform_.rotation_.y = std::atan2(worldTransform_.translation_.x, worldTransform_.translation_.z);
 	// ベクターの加算
-	worldTransform_.translation_ = Add(worldTransform_.translation_, worldTransform_.translation_); 
+	worldTransform_.translation_ = Add(worldTransform_.translation_, move_); 
 	
 	
+	/*move_.x = -cosf(rotf) * 10.0f;
+	move_.z = -sinf(rotf) * 10.0f;*/
+
+	worldTransform_.translation_.x = -cosf(rotf) * 10.0f;
+	worldTransform_.translation_.z = -sinf(rotf) * 10.0f;
+
 	worldTransform_.UpdateMatrix();
 
 #ifdef _DEBUG

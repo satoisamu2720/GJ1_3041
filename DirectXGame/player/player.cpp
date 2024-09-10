@@ -10,7 +10,7 @@ void Player::Initialize(const std::vector<Model*>& models) {
 	worldTransform_.Initialize();
 
 	// 初期ポジティブ
-	//worldTransform_.translation_ = position;
+	worldTransform_.translation_ = {0.0f, 0.5f, 0.0f};
 
 	degree = position_;
 

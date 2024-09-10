@@ -42,10 +42,11 @@ void GameScene::Initialize() {
 
 #pragma region 地面初期
 
-	modelGround_ = Model::CreateFromOBJ("ground", true);
-	ground_ = std::make_unique<Ground>();
-	ground_->Initialize(modelGround_, {0.0f, 0.0f, 0.0f});
-
+	
+		modelGround_ = Model::CreateFromOBJ("ground", true);
+		ground_ = std::make_unique<Ground>();
+	    ground_->Initialize(modelGround_);
+	
 #pragma endregion
 
 

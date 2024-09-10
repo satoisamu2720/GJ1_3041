@@ -122,9 +122,9 @@ void GameScene::Update() {
 	}
 
 	ImGui::Begin("Flag");
-	ImGui::Checkbox(" key Flag", &keyFlag_);
-	ImGui::Checkbox(" next Flag", &nextFlag_[0]);
-	ImGui::Checkbox(" next Flag", &nextFlag_[1]);
+	ImGui::Checkbox(" Key Flag", &keyFlag_);
+	ImGui::Checkbox(" Stage 1 Flag", &nextFlag_[0]);
+	ImGui::Checkbox(" Stage 2 Flag", &nextFlag_[1]);
 	ImGui::End();
 
 #endif

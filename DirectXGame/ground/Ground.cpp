@@ -1,26 +1,40 @@
 #include "Ground.h"
 
-void Ground::Initialize(Model* model) {
+void Ground::Initialize(Model* model, Vector3 position)
+{
 	assert(model);
 	model_ = model;
 
 
-	groundPosition_[0] = {0.0f, 8.0f, 0.0f};
-	groundPosition_[1] = {0.0f, 0.0f, 0.0f};
+	worldTransform_.Initialize();
+	worldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
+	worldTransform_.rotation_ = {0.0f, 0.0f, 0.0f};
+	worldTransform_.translation_ = position;
 
-	for (int i = 0; i < 15; i++) {
-		worldTransform_[i].Initialize();
-		worldTransform_[i].scale_ = {1.0f, 1.0f, 1.0f};
-		worldTransform_[i].translation_ = groundPosition_[i];
-		worldTransform_[i].UpdateMatrix();
-	}
+
+	
 }
 
-void Ground::Update() {}
+void Ground::Update() {
+	worldTransform_.UpdateMatrix();
 
-void Ground::Draw(ViewProjection& view) {
-	for (int i = 0; i < 15; i++) {
-		model_->Draw(worldTransform_[0], view);
-		model_->Draw(worldTransform_[1], view);
-	}
+#ifdef _DEBUG
+
+	ImGui::Begin("Ground");
+	//ImGui::Checkbox("Key Flag", &isDead_);
+	ImGui::End();
+
+#endif
 }
+
+void Ground::Draw(ViewProjection& view) { model_->Draw(worldTransform_, view); }
+
+Vector3 Ground::GetWorldPosition() {
+	Vector3 worldPos;
+
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+};

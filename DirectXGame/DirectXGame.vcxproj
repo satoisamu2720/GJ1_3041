@@ -112,6 +112,7 @@
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="camera\FollowCamera.cpp" />
     <ClCompile Include="ground\Ground.cpp" />
+    <ClCompile Include="key\KeyItem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MT\MT.cpp" />
     <ClCompile Include="MT\WorldTransform.EX.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="camera\FollowCamera.h" />
     <ClInclude Include="ground\Ground.h" />
     <ClInclude Include="input\Input.h" />
+    <ClInclude Include="key\KeyItem.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />
     <ClInclude Include="math\Vector3.h" />

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ImGuiManager.h"
 #include "Model.h"
 #include "WorldTransform.h"
@@ -7,7 +8,7 @@
 #include <optional>
 #include <stdio.h>
 
-class Ground {
+class KeyItem {
 public:
 	void Initialize(Model* model, Vector3 position);
 
@@ -19,7 +20,11 @@ public:
 
 	bool IsDead() const { return isDead_; }
 
-	void SetGroundFlag(bool keyFlag) { isDead_ = keyFlag; }
+	void SetKeyFlag(bool keyFlag) { 
+	
+			isDead_ = keyFlag;
+	}
+	//void SetTranslate(Vector3 translate) { worldTransform_.translation_ = translate; }
 
 public:
 	WorldTransform worldTransform_;

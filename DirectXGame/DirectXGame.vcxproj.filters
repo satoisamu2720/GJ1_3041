@@ -70,6 +70,9 @@
     <Filter Include="pillar">
       <UniqueIdentifier>{30be11ed-7874-44bc-bbaa-40174ff8e19a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="key">
+      <UniqueIdentifier>{668ab2fa-8606-403e-a42e-282bbbf0d2b2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -107,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="pillar\Pillar.cpp">
       <Filter>pillar</Filter>
+    </ClCompile>
+    <ClCompile Include="key\KeyItem.cpp">
+      <Filter>key</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="pillar\Pillar.h">
       <Filter>pillar</Filter>
+    </ClInclude>
+    <ClInclude Include="key\KeyItem.h">
+      <Filter>key</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

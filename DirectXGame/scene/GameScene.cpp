@@ -86,6 +86,7 @@ void GameScene::Update() {
 	// カメラ処理
 	if (isDebugCameraActive_ == true) {
 		debugCamera_->Update();
+		followCamera_->Update();
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
 		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		// ビュープロジェクション行列の転送
@@ -152,8 +153,8 @@ void GameScene::Update() {
 		if ((playerLeftX_ < keyRightX_ && keyRightX_ > keyLeftX_) && (keyFlontZ_ > playerBackZ_ && keyBackZ_ < playerFlontZ_)) {
 
 			keyFlag_ = true;
-			nextFlag_[i] = true;
-			i += 1;
+			nextFlag_[keyCount] = true;
+			keyCount += 1;
 
 			if (keyFlag_) {
 				key_->SetKeyFlag(keyFlag_);
@@ -380,5 +381,7 @@ void GameScene::Draw() {
 
 void GameScene::Reset() {
 	LoadKeyPopData();
-	
+		nextFlag_[0] = false;
+		nextFlag_[1] = false;
+		keyCount = 0;
 }

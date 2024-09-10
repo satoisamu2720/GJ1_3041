@@ -105,7 +105,7 @@ private: // メンバ変数
 	Model* modelKey_ = nullptr;
 	bool keyFlag_ = false;
 	bool nextFlag_[10] = {false}; 
-	int i = 0;
+	int keyCount = 0;
 
 
 	DirectXCommon* dxCommon_ = nullptr;

@@ -130,7 +130,7 @@ void GameScene::Draw() {
 	//プレイヤー
 	player_->Draw(viewProjection_);
 	//地面
-	ground_->Draw(viewProjection_);
+	//ground_->Draw(viewProjection_);
 	//柱
 	pillar_->Draw(viewProjection_);
 

@@ -23,7 +23,7 @@ private:
 	
 
 	// キャラクターの移動速度
-	const float playerSpeed = 0.5f;
+	const float playerSpeed = 0.58f;
 
 	Input* input_ = nullptr;
 

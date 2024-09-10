@@ -83,8 +83,8 @@ void Player::Update() {
 	/*move_.x = -cosf(rotf) * 10.0f;
 	move_.z = -sinf(rotf) * 10.0f;*/
 
-	worldTransform_.translation_.x = -cosf(rotf) * 10.0f;
-	worldTransform_.translation_.z = -sinf(rotf) * 10.0f;
+	worldTransform_.translation_.x = -cosf(rotf) * 20.0f;
+	worldTransform_.translation_.z = -sinf(rotf) * 20.0f;
 
 	worldTransform_.UpdateMatrix();
 

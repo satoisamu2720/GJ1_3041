@@ -44,7 +44,7 @@ void GameScene::Initialize() {
 
 	modelGround_ = Model::CreateFromOBJ("ground", true);
 	ground_ = std::make_unique<Ground>();
-	ground_->Initialize(modelGround_, {1.0f, 0.0f, 0.0f});
+	ground_->Initialize(modelGround_, {0.0f, 0.0f, 0.0f});
 
 #pragma endregion
 
@@ -53,7 +53,7 @@ void GameScene::Initialize() {
 
 	modelPillar_ = Model::CreateFromOBJ("pillar", true);
 	pillar_ = std::make_unique<Pillar>();
-	pillar_->Initialize(modelPillar_, {1.0f, 0.0f, 0.0f});
+	pillar_->Initialize(modelPillar_, {0.0f, 0.0f, 0.0f});
 
 #pragma endregion
 
@@ -130,7 +130,7 @@ void GameScene::Draw() {
 	//プレイヤー
 	player_->Draw(viewProjection_);
 	//地面
-	//ground_->Draw(viewProjection_);
+	ground_->Draw(viewProjection_);
 	//柱
 	pillar_->Draw(viewProjection_);
 

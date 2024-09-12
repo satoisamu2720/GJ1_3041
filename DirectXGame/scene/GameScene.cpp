@@ -165,8 +165,8 @@ void GameScene::Update() {
 			if ((playerLeftX_ < keyRightX_ && playerRightX_ > keyLeftX_) && (keyFlontZ_ > playerBackZ_ && keyBackZ_ < playerFlontZ_)) {
 
 			keyFlag_ = true;
-			nextFlag_[keyCount] = true;
-			keyCount += 1;
+			nextFlag_[nextStageKey] = true;
+			nextStageKey += 1;
 
 				if (openTimerFlag) {
 				}
@@ -355,5 +355,5 @@ void GameScene::Reset() {
 	LoadKeyPopData();
 		nextFlag_[0] = false;
 		nextFlag_[1] = false;
-		keyCount = 0;
+	    nextStageKey = 0;
 }

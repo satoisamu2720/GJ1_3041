@@ -67,18 +67,7 @@ public: // メンバ関数
 
 #pragma endregion
 
-#pragma region 床CSV関数
 
-	// 床発生データを読み込み
-	void LoadGroundPopData();
-
-	// 床の発生コマンドの更新
-	void UpdateGroundPopCommands();
-
-	/// 床の生成
-	void GroundGenerate(Vector3 position);
-
-#pragma endregion
 
 private: // メンバ変数
 
@@ -88,12 +77,15 @@ private: // メンバ変数
 	std::unique_ptr<Model> modelPlayer_;
 	std::list<Player*> players_;
 
-	//地面
-	std::list < std::unique_ptr<Ground>> grounds_;
-	// 発生コマンド
-	std::stringstream groundPopCommands;
-	Model* modelGround_ = nullptr;
+	//床
+	std::unique_ptr<Ground> ground_;
+	std::unique_ptr<Model> modelGround_;
+	std::list<Ground*> grounds_;
 
+	float openTimer = 0;
+	bool openTimerFlag = false;
+	
+	
 	//柱
 	std::unique_ptr<Pillar> pillar_;
 	Model* modelPillar_ = nullptr;
@@ -105,7 +97,7 @@ private: // メンバ変数
 	Model* modelKey_ = nullptr;
 	bool keyFlag_ = false;
 	bool nextFlag_[10] = {false}; 
-	int keyCount = 0;
+	int nextStageKey = 0;
 
 
 	DirectXCommon* dxCommon_ = nullptr;

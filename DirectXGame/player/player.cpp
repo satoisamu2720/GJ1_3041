@@ -67,7 +67,7 @@ void Player::Update() {
 	} 
 
 	if (input_->PushKey(DIK_DOWN) || input_->PushKey(DIK_S)) {
-		move_.y -= 0.1f;
+		move_.y -= g;
 	} 
 
 	

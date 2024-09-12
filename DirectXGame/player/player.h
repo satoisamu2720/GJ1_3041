@@ -48,6 +48,8 @@ private:
 	// 　矢印を押したときの番号
 	int stageCount_ = 0;
 
+	float g = 0.1f;
+
 
 public:
 	// プレイヤー初期化

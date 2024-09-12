@@ -26,7 +26,7 @@ public:
 	}
 	//void SetTranslate(Vector3 translate) { worldTransform_.translation_ = translate; }
 
-public:
+private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 

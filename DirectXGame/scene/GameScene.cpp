@@ -134,7 +134,11 @@ void GameScene::Update() {
 	ImGui::Checkbox(" Stage 1 Flag", &nextFlag_[0]);
 	ImGui::Checkbox(" Stage 2 Flag", &nextFlag_[1]);
 	ImGui::Checkbox(" openTimerFlag", &openTimerFlag);
-	ImGui::DragFloat("openTimer", &openTimer);
+	ImGui::DragInt("nextStageKey", &nextStageKey);
+	ImGui::DragFloat("testBackZ_", &testBackZ_);
+	ImGui::DragFloat("testFlontZ_", &testFlontZ_);
+	ImGui::DragFloat("testLeftX_", &testLeftX_);
+	ImGui::DragFloat("testRightX_", &testRightX_);
 	
 	ImGui::End();
 
@@ -153,7 +157,7 @@ void GameScene::Update() {
 
 	for (const std::unique_ptr<KeyItem>& key_ : keys_) {
 		
-		for (int i = 0; i < 10; i++) {
+		
 
 			keyFlag_ = key_->IsDead();
 
@@ -164,26 +168,24 @@ void GameScene::Update() {
 
 			if ((playerLeftX_ < keyRightX_ && playerRightX_ > keyLeftX_) && (keyFlontZ_ > playerBackZ_ && keyBackZ_ < playerFlontZ_)) {
 
-			keyFlag_ = true;
-			nextFlag_[nextStageKey] = true;
-			nextStageKey += 1;
-
+				keyFlag_ = true;
+				openTimerFlag = true;
+				nextFlag_[nextStageKey] = true;
+				nextStageKey += 1;
+			    ground_->SetNextStageKey(nextStageKey);
 				if (openTimerFlag) {
 				}
 				if (keyFlag_) {
 
-					Vector3 tmpTranslate = ground_->GetRotation();
-
-					tmpTranslate.y += 0.01f;
-
 					key_->SetKeyFlag(keyFlag_);
-					nextFlag_[nextStageKey] = true;
-					nextStageKey += 1;
-					ground_->SetRotation(tmpTranslate);
+					ground_->SetNextStageFlag(keyFlag_);
 				}
 			}
-		}
 		
+		
+	}
+	if (openTimerFlag == false) {
+		ground_->SetNextStageFlag(keyFlag_);
 	}
 	if (openTimerFlag) {
 		openTimer++;
@@ -192,20 +194,29 @@ void GameScene::Update() {
 	if (openTimer >= 60) {
 		openTimer = 0;
 		openTimerFlag = false;
+		keyFlag_ = false;
 	}
 #pragma endregion
 
 #pragma region プレイヤーと床の当たり判定
 
-	
-			groundBackZ_ = ground_->GetWorldPosition().z - 1.0f;
-			groundFlontZ_ = ground_->GetWorldPosition().z + 1.0f;
-	        groundLeftX_ = ground_->GetWorldPosition().x - 1.0f;
-	        groundRightX_ = ground_->GetWorldPosition().x + 1.0f;
+	groundBackZ_ = ground_->GetWorldPositionOne().z - 20;
+	groundFlontZ_ = ground_->GetWorldPositionOne().z + testFlontZ_;
+	groundLeftX_ = ground_->GetWorldPositionOne().x - testLeftX_;
+	groundRightX_ = ground_->GetWorldPositionOne().x + 12;
 
-			if ((playerLeftX_ < groundRightX_ && playerRightX_ > groundLeftX_) && (groundFlontZ_ > playerBackZ_ && groundBackZ_ < playerFlontZ_)) {
+	if ((playerLeftX_ < groundRightX_ && playerRightX_ > groundLeftX_) && (groundFlontZ_ > playerBackZ_ && groundBackZ_ < playerFlontZ_)) {
 
-			}
+		if (nextStageFlag  == false&& nextStageKey == 1) {
+			   nextStageFlag = true;
+		}
+
+		if (nextStageFlag && nextStageKey == 1) {
+			Vector3 tmpTranslate = player_->GetWorldPosition();
+			tmpTranslate.y -= 0.1f;
+			player_->SetTranslate(tmpTranslate);
+		}
+	}
 #pragma endregion
 
 #pragma region CSV 更新処理, デスフラグ

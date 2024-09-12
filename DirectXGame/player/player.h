@@ -62,6 +62,8 @@ public:
 	void Draw(ViewProjection& view);
 
 
+	void SetTranslate(Vector3 translate) { worldTransform_.translation_ = translate; }
+
 	Vector3 GetWorldPosition();
 
 	const WorldTransform& GetWorldTransform()

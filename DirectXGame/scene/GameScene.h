@@ -84,6 +84,8 @@ private: // メンバ変数
 
 	float openTimer = 0;
 	bool openTimerFlag = false;
+
+	bool nextStageFlag = false;
 	
 	
 	//柱
@@ -132,6 +134,11 @@ private: // メンバ変数
 	float groundBackZ_;
 	float groundRightX_;
 	float groundLeftX_;
+
+	float testFlontZ_;
+	float testBackZ_;
+	float testRightX_;
+	float testLeftX_;
 
 
 	/// <summary>

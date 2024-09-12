@@ -22,18 +22,21 @@ public:
 
 	void Draw(ViewProjection& view);
 
-	Vector3 GetWorldPosition();
-
-	Vector3 GetRotation() { return worldTransform_.rotation_; }
-
-	void SetRotation(Vector3 rot) { worldTransform_.rotation_ = rot; }
+	Vector3 GetWorldPositionOne();
 
 	bool IsDead() const { return isDead_; }
 
 	void SetGroundFlag(bool keyFlag) { isDead_ = keyFlag; }
 
+	void SetNextStageFlag(bool nextStageFlag) { nextStageFlag_ = nextStageFlag; }
+
+	void SetNextStageKey(int nextStageKey) { nextStageKey_ = nextStageKey; }
+
 private:
-	WorldTransform worldTransform_;
+	WorldTransform worldTransform_[5];
+
+	WorldTransform worldTransformHole_[5];
+
 	const ViewProjection* viewProjection_ = nullptr;
 	Model* model_ = nullptr;
 	Input* input_ = nullptr;
@@ -51,4 +54,10 @@ private:
 
 	// デスフラグ
 	bool isDead_ = false;
+
+	bool nextStageFlag_ = false;
+
+	int nextStageKey_ = 0;
+
+	float ttt = 0.52f;
 };

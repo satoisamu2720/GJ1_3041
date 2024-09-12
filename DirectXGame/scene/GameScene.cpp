@@ -67,6 +67,14 @@ void GameScene::Initialize() {
 
 #pragma endregion
 
+#pragma region マグマ初期化
+
+	modelMagma_.reset(Model::CreateFromOBJ("magma",true)); 
+	magma_ = std::make_unique<Magma>();
+	magma_->Initialize(modelMagma_.get());
+
+#pragma endregion
+
 	debugCamera_ = std::make_unique<DebugCamera>(1280, 720);
 	
 
@@ -113,6 +121,9 @@ void GameScene::Update() {
 	for (const std::unique_ptr<KeyItem>& key_ : keys_) {
 		key_->Update();
 	}
+
+	// マグマ
+	magma_->Update();
 
 #pragma endregion
 
@@ -161,6 +172,24 @@ void GameScene::Update() {
 			}
 		}
 	}
+
+	#pragma region プレイヤーとマグマの当たり判定
+
+	Vector3 playerPosition = player_->GetWorldPosition();
+	Vector3 magmaPosition = magma_->GetWorldPosition();
+	Vector3 magmaScale = magma_->GetScale();
+
+	if (playerPosition.x - 1.0f < magmaPosition.x + magmaScale.x && magmaPosition.x - magmaScale.x < playerPosition.x + 1.0f) {
+		if (playerPosition.y - 1.0f < magmaPosition.y + magmaScale.y && magmaPosition.y - magmaScale.y < playerPosition.y + 1.0f) {
+			if (playerPosition.z - 1.0f < magmaPosition.z + magmaScale.z && magmaPosition.z - magmaScale.z < playerPosition.z + 1.0f) {
+				ImGui::Begin("Collision");
+				ImGui::Text("Hit");
+				ImGui::End();
+			}
+		}
+	}
+
+#pragma endregion
 
 #pragma endregion
 
@@ -359,6 +388,8 @@ void GameScene::Draw() {
 		key_->Draw(viewProjection_);
 	}
 
+	//マグマ
+	magma_->Draw(viewProjection_);
 
 	Model::PostDraw();
 #pragma endregion

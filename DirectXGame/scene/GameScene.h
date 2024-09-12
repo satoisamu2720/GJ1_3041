@@ -20,6 +20,7 @@
 #include "ground/Ground.h"
 #include "pillar/Pillar.h"
 #include "key/KeyItem.h"
+#include "magma/Magma.h"
 
 /// <summary>
 /// ゲームシーン
@@ -107,6 +108,9 @@ private: // メンバ変数
 	bool nextFlag_[10] = {false}; 
 	int keyCount = 0;
 
+	// マグマ
+	std::unique_ptr<Magma> magma_ = nullptr;
+	std::unique_ptr<Model> modelMagma_ = nullptr;
 
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;

@@ -73,6 +73,9 @@
     <Filter Include="key">
       <UniqueIdentifier>{668ab2fa-8606-403e-a42e-282bbbf0d2b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="magma">
+      <UniqueIdentifier>{5fb07691-681d-4d03-b5c6-79ef652ea91f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -113,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="key\KeyItem.cpp">
       <Filter>key</Filter>
+    </ClCompile>
+    <ClCompile Include="magma\Magma.cpp">
+      <Filter>magma</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="key\KeyItem.h">
       <Filter>key</Filter>
+    </ClInclude>
+    <ClInclude Include="magma\Magma.h">
+      <Filter>magma</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

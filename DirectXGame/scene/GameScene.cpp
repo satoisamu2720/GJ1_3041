@@ -145,6 +145,7 @@ void GameScene::Update() {
 
 	ImGui::Begin("Flag");
 	ImGui::DragInt("nextStageKey", &nextStageKey);
+	ImGui::DragInt("nextStage", &nextStage);
 	ImGui::Checkbox(" nextStageFlag", &nextStageFlag);
 	ImGui::DragFloat("testBackZ_", &testBackZ_);
 	ImGui::DragFloat("testFlontZ_", &testFlontZ_);
@@ -199,6 +200,7 @@ void GameScene::Update() {
 						if (keyFlag) {
 						    nextStage += 1;
 						    nextStageKey += 1;
+						    nextStageFlag = true;
 						    key_->SetKeyFlag(keyFlag);
 						    ground_->SetGroundFlag(keyFlag);
 						    ground_->SetNextStageKey(nextStageKey);
@@ -223,10 +225,11 @@ void GameScene::Update() {
 		if ((playerLeftX_ < groundPieceRightX_ && playerRightX_ > groundPieceLeftX_) 
 			&& (groundPieceFlontZ_ > playerBackZ_ && groundPieceBackZ_ < playerFlontZ_) 
 			&&
-		    (playerUpY_ > grouudPieceDownY_ && playerDownY_ < groundPieceUpY_) && nextStage >= nextStageKey) {
-			nextStageFlag = true;
+		    (playerUpY_ > grouudPieceDownY_ && playerDownY_ < groundPieceUpY_) && nextStageFlag == true) {
+			fallingFlag = true;
+			nextStageFlag = false;
 		}
-		if (nextStageFlag) {
+		if (fallingFlag && nextStage == nextStageKey) {
 			timerFlag = true;
 			Vector3 tmpTranslate = player_->GetWorldPosition();
 			tmpTranslate.y -= 0.1f;
@@ -237,12 +240,29 @@ void GameScene::Update() {
 		}
 		if (timer >= 320) {
 		    timerFlag = false;
-		    nextStageFlag = false;
+			fallingFlag = false;
 		    timer = 0;
 		}
 		
 	}
-	if (nextStageKey == 1 && timer >= 60) {
+	/*if (timer >= 60) {
+		testBackZ_ =0;
+		testFlontZ_ = 0;
+		testLeftX_ = 0;
+		testRightX_ = 0;
+		testUpY_ = 0;
+		testDownY_= 0;
+	}*/
+
+	if (nextStage == 1 && nextStageFlag) {
+		testBackZ_ = 20;
+		testFlontZ_ = 10;
+		testLeftX_ = 5;
+		testRightX_ = 4;
+		testUpY_ = 1;
+		testDownY_ = 1;
+	}
+	if (nextStage == 2 && nextStageFlag) {
 		testBackZ_ = 11.5f; 
 		testFlontZ_ = -5;
 		testLeftX_=-8;
@@ -250,7 +270,7 @@ void GameScene::Update() {
 		testUpY_;
 		testDownY_;
 	}
-	if (nextStageKey == 2 && timer >= 60) {
+	if (nextStage == 3 && nextStageFlag) {
 		testBackZ_ = -10;
 		testFlontZ_ = 20;
 		testLeftX_ = 2;

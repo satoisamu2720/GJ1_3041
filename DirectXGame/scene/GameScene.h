@@ -132,7 +132,7 @@ private: // メンバ変数
 	int nextStage = 0;
 	float timer = 0.0f;
 	bool timerFlag = false;
-
+	bool fallingFlag = false;
 	//柱
 	std::unique_ptr<Pillar> pillar_;
 	Model* modelPillar_ = nullptr;
@@ -198,12 +198,12 @@ private: // メンバ変数
 	float grouudPieceDownY_;
 
 
-	float testBackZ_ = 20;
-	float testFlontZ_ = 10;
-	float testLeftX_= 5;
-	float testRightX_ = 4;
-	float testUpY_ = 1;
-	float testDownY_ = 1;
+	float testBackZ_ = 0;
+	float testFlontZ_ = 0;
+	float testLeftX_= 0;
+	float testRightX_ = 0;
+	float testUpY_ = 0;
+	float testDownY_ = 0;
 
 
 	/// <summary>

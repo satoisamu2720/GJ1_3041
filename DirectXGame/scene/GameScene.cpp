@@ -127,6 +127,7 @@ void GameScene::Update() {
 	}
 	// 柱
 	pillar_->Update();
+
 	for (const std::unique_ptr<Wall>& wall_ : walls_) {
 		wall_->Update();
 	}
@@ -246,14 +247,14 @@ void GameScene::Update() {
 		
 	}
 
-	/*for (const std::unique_ptr<Wall>& wall_ : walls_) {
+	for (const std::unique_ptr<Wall>& wall_ : walls_) {
 
 		rightwallBackZ_ = wall_->GetWorldPosition().z - 5;
 		rightwallFlontZ_ = wall_->GetWorldPosition().z + 5;
-		rightwallLeftX_ = wall_->GetWorldPosition().x +1;
-		rightwallRightX_ = wall_->GetWorldPosition().x +2;
-		rightwallUpY_ = wall_->GetWorldPosition().y + 5;
-		rightwallDownY_ = wall_->GetWorldPosition().y - 5;
+		rightwallLeftX_ = wall_->GetWorldPosition().x -3;
+		rightwallRightX_ = wall_->GetWorldPosition().x -2;
+		rightwallUpY_ = wall_->GetWorldPosition().y + 3;
+		rightwallDownY_ = wall_->GetWorldPosition().y - 3;
 
 		if ((playerLeftX_ < rightwallRightX_ && playerRightX_ > rightwallLeftX_) 
 			&& (rightwallFlontZ_ > playerBackZ_ && rightwallBackZ_ < playerFlontZ_) 
@@ -262,16 +263,16 @@ void GameScene::Update() {
 			player_->SetRightWallFlag(rightFalg);
 			followCamera_->SetRightFollllFlag(rightFalg);
 		}
-	}*/
+	}
 
-	/*for (const std::unique_ptr<Wall>& wall_ : walls_) {
+	for (const std::unique_ptr<Wall>& wall_ : walls_) {
 
 		leftwallBackZ_ = wall_->GetWorldPosition().z - 5;
 		leftwallFlontZ_ = wall_->GetWorldPosition().z + 5;
-		leftwallLeftX_ = wall_->GetWorldPosition().x + 2;
-		leftwallRightX_ = wall_->GetWorldPosition().x +1;
-		leftwallUpY_ = wall_->GetWorldPosition().y + 5;
-		leftwallDownY_ = wall_->GetWorldPosition().y - 5;
+		leftwallLeftX_ = wall_->GetWorldPosition().x -4;
+		leftwallRightX_ = wall_->GetWorldPosition().x -3;
+		leftwallUpY_ = wall_->GetWorldPosition().y + 3;
+		leftwallDownY_ = wall_->GetWorldPosition().y - 3;
 
 		if ((playerLeftX_ < leftwallRightX_ && playerRightX_ > leftwallLeftX_) 
 			&& (leftwallFlontZ_ > playerBackZ_ && leftwallBackZ_ < playerFlontZ_) &&
@@ -280,10 +281,7 @@ void GameScene::Update() {
 			player_->SetLeftWallFlag(lightFalg);
 			followCamera_->SetLeftFollFlag(lightFalg);
 		}
-	}*/
-
-
-	
+	}
 
 	/*if (timer >= 60) {
 		testBackZ_ =0;
@@ -708,9 +706,9 @@ void GameScene::Draw() {
 	for (const std::unique_ptr<KeyItem>& key_ : keys_) {
 		key_->Draw(viewProjection_);
 	}
-	/*for (const std::unique_ptr<Wall>& wall_ : walls_) {
+	for (const std::unique_ptr<Wall>& wall_ : walls_) {
 		wall_->Draw(viewProjection_);
-	}*/
+	}
 
 	Model::PostDraw();
 #pragma endregion

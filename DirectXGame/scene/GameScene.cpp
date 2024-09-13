@@ -140,6 +140,7 @@ void GameScene::Update() {
 	ImGui::DragFloat("testFlontZ_", &testFlontZ_);
 	ImGui::DragFloat("testLeftX_", &testLeftX_);
 	ImGui::DragFloat("testRightX_", &testRightX_);
+	ImGui::DragFloat("timer", &timer);
 	
 	ImGui::End();
 
@@ -157,10 +158,17 @@ void GameScene::Update() {
 #pragma endregion
 
 #pragma region プレイヤーと鍵の当たり判定
-	
+	for (const std::unique_ptr<Ground>& ground_ : grounds_) {
+		groundBackZ_ = ground_->GetWorldPosition().z - 20;
+		groundFlontZ_ = ground_->GetWorldPosition().z + 20;
+		groundLeftX_ = ground_->GetWorldPosition().x - 20;
+		groundRightX_ = ground_->GetWorldPosition().x + 20;
+		groundUpY_ = ground_->GetWorldPosition().y + 1.0f;
+		grouudDownY_ = ground_->GetWorldPosition().y - 1.0f;
+
 		for (const std::unique_ptr<KeyItem>& key_ : keys_) {
 
-			nextStageFlag = key_->IsDead();
+			keyFlag = key_->IsDead();
 
 			keyBackZ_ = key_->GetWorldPosition().z - 1.0f;
 			keyFlontZ_ = key_->GetWorldPosition().z + 1.0f;
@@ -171,47 +179,75 @@ void GameScene::Update() {
 
 			if ((playerLeftX_ < keyRightX_ && playerRightX_ > keyLeftX_) 
 				&& (keyFlontZ_ > playerBackZ_ && keyBackZ_ < playerFlontZ_) 
-				&& (playerUpY_ > keyDownY_ && playerDownY_ < keyUpY_)) {
-				nextStageFlag = true;
+				&& (playerUpY_ > keyDownY_ && playerDownY_ < keyUpY_) 
+				&& keyFlag == false) {
+
+					keyFlag = true;
+					if ((playerLeftX_ < groundRightX_ && playerRightX_ > groundLeftX_) && (groundFlontZ_ > playerBackZ_ && groundBackZ_ < playerFlontZ_) &&
+					    (playerUpY_ > grouudDownY_ && playerDownY_ < groundUpY_)) {
+
+						if (keyFlag) {
+						    nextStage += 1;
+						    nextStageKey += 1;
+						    key_->SetKeyFlag(keyFlag);
+						    ground_->SetGroundFlag(keyFlag);
+						    ground_->SetNextStageKey(nextStageKey);
+						}
+					}
 				
-				if (nextStageFlag) {
-					nextStageKey += 1;
-					key_->SetKeyFlag(nextStageFlag);
-				}
 			}
 		}
+	}
 
 #pragma endregion
 
 #pragma region プレイヤーと床の当たり判定
-	for (const std::unique_ptr<Ground>& ground_ : grounds_) {
-		groundBackZ_ = ground_->GetWorldPosition().z - 20;
-		groundFlontZ_ = ground_->GetWorldPosition().z + 20;
-		groundLeftX_ = ground_->GetWorldPosition().x - 20;
-		groundRightX_ = ground_->GetWorldPosition().x + 20;
-		groundUpY_ = ground_->GetWorldPosition().y + 1.0f;
-		grouudDownY_ = ground_->GetWorldPosition().y - 1.0f;
+	for (const std::unique_ptr<GroundPiece>& groundPiece_ : groundPieces_) {
+		groundPieceBackZ_ = groundPiece_->GetWorldPosition().z - testBackZ_;
+		groundPieceFlontZ_ = groundPiece_->GetWorldPosition().z + testFlontZ_;
+		groundPieceLeftX_ = groundPiece_->GetWorldPosition().x - testLeftX_;
+		groundPieceRightX_ = groundPiece_->GetWorldPosition().x + testRightX_;
+		groundPieceUpY_ = groundPiece_->GetWorldPosition().y + testUpY_;
+		grouudPieceDownY_ = groundPiece_->GetWorldPosition().y - testDownY_;
 
-		if ((playerLeftX_ < groundRightX_ && playerRightX_ > groundLeftX_) 
-			&& (groundFlontZ_ > playerBackZ_ && groundBackZ_ < playerFlontZ_) 
-			&& (playerUpY_ > grouudDownY_ && playerDownY_ < groundUpY_)) {
-			if (nextStageFlag) {
-
-				ground_->SetGroundFlag(nextStageFlag);
-			}
-			
-
-			/*if (nextStageFlag == false && nextStageKey == 1) {
-				nextStageFlag = true;
-			}
-
-			if (nextStageFlag && nextStageKey == 1) {
-				Vector3 tmpTranslate = player_->GetWorldPosition();
-				tmpTranslate.y -= 0.1f;
-				player_->SetTranslate(tmpTranslate);
-			}*/
+		if ((playerLeftX_ < groundPieceRightX_ && playerRightX_ > groundPieceLeftX_) 
+			&& (groundPieceFlontZ_ > playerBackZ_ && groundPieceBackZ_ < playerFlontZ_) 
+			&&(playerUpY_ > grouudPieceDownY_ && playerDownY_ < groundPieceUpY_) && nextStageKey >= 1) {
+			nextStageFlag = true;
 		}
+		if (nextStageFlag && nextStageKey == nextStage) {
+			timerFlag = true;
+			Vector3 tmpTranslate = player_->GetWorldPosition();
+			tmpTranslate.y -= 0.1f;
+			player_->SetTranslate(tmpTranslate);
+		}
+		if (timerFlag) {
+			timer++;
+		}
+		if (timer >= 320) {
+		    timerFlag = false;
+		    nextStageFlag = false;
+		    timer = 0;
+		}
+		
 	}
+	if (nextStageKey == 1 && timer >= 60) {
+		testBackZ_ = 11.5f; 
+		testFlontZ_ = -5;
+		testLeftX_=-8;
+		testRightX_=20;
+		testUpY_;
+		testDownY_;
+	}
+	if (nextStageKey == 2 && timer >= 60) {
+		testBackZ_ = -10;
+		testFlontZ_ = 20;
+		testLeftX_ = 2;
+		testRightX_ = 7;
+		testUpY_;
+		testDownY_;
+	}
+
 #pragma endregion
 
 #pragma region CSV 更新処理, デスフラグ
@@ -397,13 +433,13 @@ void GameScene::GroundGenerate(Vector3 position, Vector3 rotation) {
 #pragma region 床 CSV
 
 void GameScene::LoadGroundPiecePopData() {
-	groundPopCommands.clear();
+	groundPiecePopCommands.clear();
 	std::ifstream file;
 	file.open("Resources/CSV/GroundPiecePop.csv");
 	assert(file.is_open());
 
 	// ファイルの内容を文字列ストリームにコピー
-	groundPopCommands << file.rdbuf();
+	groundPiecePopCommands << file.rdbuf();
 
 	// ファイルを閉じる
 	file.close();
@@ -413,7 +449,7 @@ void GameScene::UpdateGroundPiecePopCommands() {
 	std::string line;
 
 	// コマンド実行ループ
-	while (getline(groundPopCommands, line)) {
+	while (getline(groundPiecePopCommands, line)) {
 		std::istringstream line_stream(line);
 
 		std::string word;

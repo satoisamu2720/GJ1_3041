@@ -107,13 +107,17 @@ private: // メンバ変数
 	std::stringstream groundPopCommands;
 	std::unique_ptr<Model> modelGround_;
 	std::list<Ground*> modelGrounds_;
-	bool nextStageFlag = false;
+	bool keyFlag = false;
 
 	//穴床
 	std::list<std::unique_ptr<GroundPiece>> groundPieces_;
 	std::stringstream groundPiecePopCommands;
 	std::unique_ptr<Model> modelgroundPiece_;
 	std::list<GroundPiece*> modelGroundPieces_;
+	bool nextStageFlag = false;
+	int nextStage = 0;
+	float timer = 0.0f;
+	bool timerFlag = false;
 
 	//柱
 	std::unique_ptr<Pillar> pillar_;
@@ -175,12 +179,12 @@ private: // メンバ変数
 	float grouudPieceDownY_;
 
 
-	float testFlontZ_;
-	float testBackZ_;
-	float testRightX_;
-	float testLeftX_;
-	float testUpY_;
-	float testDownY_;
+	float testBackZ_ = 20;
+	float testFlontZ_ = 10;
+	float testLeftX_= 5;
+	float testRightX_ = 4;
+	float testUpY_ = 1;
+	float testDownY_ = 1;
 
 
 	/// <summary>

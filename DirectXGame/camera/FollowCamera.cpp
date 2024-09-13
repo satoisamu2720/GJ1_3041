@@ -21,7 +21,8 @@ void FollowCamera::Update() {
 
 		if (input_->PushKey(DIK_D)) {
 			 viewProjection_.rotation_.y -= kRotSpeed;
-		} else if (input_->PushKey(DIK_A)) {
+		} 
+		if (input_->PushKey(DIK_A)) {
 			 viewProjection_.rotation_.y += kRotSpeed;
 		}
 

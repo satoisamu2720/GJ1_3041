@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ImGuiManager.h"
 #include "Model.h"
 #include "baseCharacter/BaseCharacter.h"
@@ -7,10 +8,8 @@
 #include <list>
 #include <optional>
 #include <stdio.h>
-
-class Ground : public BaseCharacter {
-	
-	public:
+class GroundPiece : public BaseCharacter {
+public:
 	void Initialize(const std::vector<Model*>& models, Vector3 position, Vector3 rotation);
 
 	void Update();
@@ -21,12 +20,11 @@ class Ground : public BaseCharacter {
 
 	bool IsDead() const { return isDead_; }
 
-	void SetGroundFlag(bool keyFlag) { isDead_ = keyFlag; }
+	void SetGroundPieceFlag(bool keyFlag) { isDead_ = keyFlag; }
 
 	void SetNextStageKey(bool nextStageKey) { nextStageKey_ = nextStageKey; }
 
 private:
-
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 

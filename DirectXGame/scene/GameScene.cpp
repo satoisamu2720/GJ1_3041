@@ -44,19 +44,18 @@ void GameScene::Initialize() {
 #pragma region 地面初期
 
 	
-		modelGround_.reset(Model::CreateFromOBJ("ground_piece", true));
-		// 床モデル配列
-		std::vector<Model*> groundModels = {
-	        modelGround_.get(),
-		};
-	    /*std::vector<WorldTransform*> groundPos = {
-	        
-	    };*/
-		ground_ = std::make_unique<Ground>();
-	    ground_->Initialize(groundModels);
+	modelGround_.reset(Model::CreateFromOBJ("ground", true));
+	LoadGroundPopData();
 	
 #pragma endregion
 
+#pragma region 穴床初期
+
+	modelgroundPiece_.reset(Model::CreateFromOBJ("ground_piece", true));
+	LoadGroundPiecePopData();
+
+#pragma endregion
+	
 
 #pragma region 柱初期化
 
@@ -112,8 +111,13 @@ void GameScene::Update() {
 	// プレイヤー
 	player_->Update();
 	// 地面
-	
-	ground_->Update();
+	for (const std::unique_ptr<Ground>& ground_ : grounds_) {
+		ground_->Update();
+	}
+	// 地面
+	for (const std::unique_ptr<GroundPiece>& groundPiece_ : groundPieces_) {
+		groundPiece_->Update();
+	}
 	// 柱
 	pillar_->Update();
 	// 鍵
@@ -130,11 +134,8 @@ void GameScene::Update() {
 	}
 
 	ImGui::Begin("Flag");
-	ImGui::Checkbox(" Key Flag", &keyFlag_);
-	ImGui::Checkbox(" Stage 1 Flag", &nextFlag_[0]);
-	ImGui::Checkbox(" Stage 2 Flag", &nextFlag_[1]);
-	ImGui::Checkbox(" openTimerFlag", &openTimerFlag);
 	ImGui::DragInt("nextStageKey", &nextStageKey);
+	ImGui::Checkbox(" nextStageFlag", &nextStageFlag);
 	ImGui::DragFloat("testBackZ_", &testBackZ_);
 	ImGui::DragFloat("testFlontZ_", &testFlontZ_);
 	ImGui::DragFloat("testLeftX_", &testLeftX_);
@@ -150,71 +151,65 @@ void GameScene::Update() {
 	playerFlontZ_ = player_->GetWorldPosition().z + 1.0f;
 	playerLeftX_ = player_->GetWorldPosition().x - 1.0f;
 	playerRightX_ = player_->GetWorldPosition().x + 1.0f;
+	playerUpY_ = player_->GetWorldPosition().y + 1.0f;
+	playerDownY_ = player_->GetWorldPosition().y - 1.0f;
 
 #pragma endregion
 
 #pragma region プレイヤーと鍵の当たり判定
+	
+		for (const std::unique_ptr<KeyItem>& key_ : keys_) {
 
-	for (const std::unique_ptr<KeyItem>& key_ : keys_) {
-		
-		
-
-			keyFlag_ = key_->IsDead();
+			nextStageFlag = key_->IsDead();
 
 			keyBackZ_ = key_->GetWorldPosition().z - 1.0f;
 			keyFlontZ_ = key_->GetWorldPosition().z + 1.0f;
 			keyLeftX_ = key_->GetWorldPosition().x - 1.0f;
 			keyRightX_ = key_->GetWorldPosition().x + 1.0f;
+			keyUpY_ = key_->GetWorldPosition().y + 1.0f;
+			keyDownY_ = key_->GetWorldPosition().y - 1.0f;
 
-			if ((playerLeftX_ < keyRightX_ && playerRightX_ > keyLeftX_) && (keyFlontZ_ > playerBackZ_ && keyBackZ_ < playerFlontZ_)) {
-
-				keyFlag_ = true;
-				openTimerFlag = true;
-				nextFlag_[nextStageKey] = true;
-				nextStageKey += 1;
-			    ground_->SetNextStageKey(nextStageKey);
-				if (openTimerFlag) {
-				}
-				if (keyFlag_) {
-
-					key_->SetKeyFlag(keyFlag_);
-					ground_->SetNextStageFlag(keyFlag_);
+			if ((playerLeftX_ < keyRightX_ && playerRightX_ > keyLeftX_) 
+				&& (keyFlontZ_ > playerBackZ_ && keyBackZ_ < playerFlontZ_) 
+				&& (playerUpY_ > keyDownY_ && playerDownY_ < keyUpY_)) {
+				nextStageFlag = true;
+				
+				if (nextStageFlag) {
+					nextStageKey += 1;
+					key_->SetKeyFlag(nextStageFlag);
 				}
 			}
-		
-		
-	}
-	if (openTimerFlag == false) {
-		ground_->SetNextStageFlag(keyFlag_);
-	}
-	if (openTimerFlag) {
-		openTimer++;
-		
-	}
-	if (openTimer >= 60) {
-		openTimer = 0;
-		openTimerFlag = false;
-		keyFlag_ = false;
-	}
+		}
+
 #pragma endregion
 
 #pragma region プレイヤーと床の当たり判定
+	for (const std::unique_ptr<Ground>& ground_ : grounds_) {
+		groundBackZ_ = ground_->GetWorldPosition().z - 20;
+		groundFlontZ_ = ground_->GetWorldPosition().z + 20;
+		groundLeftX_ = ground_->GetWorldPosition().x - 20;
+		groundRightX_ = ground_->GetWorldPosition().x + 20;
+		groundUpY_ = ground_->GetWorldPosition().y + 1.0f;
+		grouudDownY_ = ground_->GetWorldPosition().y - 1.0f;
 
-	groundBackZ_ = ground_->GetWorldPositionOne().z - 20;
-	groundFlontZ_ = ground_->GetWorldPositionOne().z + testFlontZ_;
-	groundLeftX_ = ground_->GetWorldPositionOne().x - testLeftX_;
-	groundRightX_ = ground_->GetWorldPositionOne().x + 12;
+		if ((playerLeftX_ < groundRightX_ && playerRightX_ > groundLeftX_) 
+			&& (groundFlontZ_ > playerBackZ_ && groundBackZ_ < playerFlontZ_) 
+			&& (playerUpY_ > grouudDownY_ && playerDownY_ < groundUpY_)) {
+			if (nextStageFlag) {
 
-	if ((playerLeftX_ < groundRightX_ && playerRightX_ > groundLeftX_) && (groundFlontZ_ > playerBackZ_ && groundBackZ_ < playerFlontZ_)) {
+				ground_->SetGroundFlag(nextStageFlag);
+			}
+			
 
-		if (nextStageFlag  == false&& nextStageKey == 1) {
-			   nextStageFlag = true;
-		}
+			/*if (nextStageFlag == false && nextStageKey == 1) {
+				nextStageFlag = true;
+			}
 
-		if (nextStageFlag && nextStageKey == 1) {
-			Vector3 tmpTranslate = player_->GetWorldPosition();
-			tmpTranslate.y -= 0.1f;
-			player_->SetTranslate(tmpTranslate);
+			if (nextStageFlag && nextStageKey == 1) {
+				Vector3 tmpTranslate = player_->GetWorldPosition();
+				tmpTranslate.y -= 0.1f;
+				player_->SetTranslate(tmpTranslate);
+			}*/
 		}
 	}
 #pragma endregion
@@ -231,6 +226,31 @@ void GameScene::Update() {
 
 	// ボックスのCSVファイルの更新処理
 	UpdateKeyPopCommands();
+
+	// デスフラグの立った敵を削除
+	grounds_.remove_if([](std::unique_ptr<Ground>& item) {
+		if (item->IsDead()) {
+			item.release();
+			return true;
+		}
+		return false;
+	});
+
+	// 床のCSVファイルの更新処理
+	UpdateGroundPopCommands();
+
+
+	// デスフラグの立った敵を削除
+	groundPieces_.remove_if([](std::unique_ptr<GroundPiece>& item) {
+		if (item->IsDead()) {
+			item.release();
+			return true;
+		}
+		return false;
+	});
+
+	// 床のCSVファイルの更新処理
+	UpdateGroundPiecePopCommands();
 
 #pragma endregion
 }
@@ -297,8 +317,159 @@ void GameScene::KeyGenerate(Vector3 position) {
 
 #pragma endregion
 
+#pragma region 床 CSV
 
+void GameScene::LoadGroundPopData() {
+	groundPopCommands.clear();
+	std::ifstream file;
+	file.open("Resources/CSV/GroundPop.csv");
+	assert(file.is_open());
 
+	// ファイルの内容を文字列ストリームにコピー
+	groundPopCommands << file.rdbuf();
+
+	// ファイルを閉じる
+	file.close();
+}
+
+void GameScene::UpdateGroundPopCommands() {
+	std::string line;
+
+	// コマンド実行ループ
+	while (getline(groundPopCommands, line)) {
+		std::istringstream line_stream(line);
+
+		std::string word;
+		// 　,区切りで行の先頭文字列を所得
+
+		getline(line_stream, word, ',');
+
+		// "//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			// コメント行を飛ばす
+			continue;
+		}
+
+		// POPコマンド
+		if (word.find("POP") == 0) {
+			// x座標
+			getline(line_stream, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			// y座標
+			getline(line_stream, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			// z座標
+			getline(line_stream, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+			// x座標
+			getline(line_stream, word, ',');
+			float xRot = (float)std::atof(word.c_str());
+
+			// y座標
+			getline(line_stream, word, ',');
+			float yRot = (float)std::atof(word.c_str());
+
+			// z座標
+			getline(line_stream, word, ',');
+			float zRot = (float)std::atof(word.c_str());
+
+			GroundGenerate({x, y, z}, {xRot, yRot, zRot});
+		}
+	}
+}
+
+void GameScene::GroundGenerate(Vector3 position, Vector3 rotation) {
+	// 床モデル配列
+	std::vector<Model*> groundModels = {
+	    modelGround_.get(),
+	};
+	// アイテムの生成と初期化処理
+	Ground* ground_ = new Ground();
+	ground_->Initialize(groundModels, position, rotation);
+	grounds_.push_back(static_cast<std::unique_ptr<Ground>>(ground_));
+}
+
+#pragma endregion
+
+#pragma region 床 CSV
+
+void GameScene::LoadGroundPiecePopData() {
+	groundPopCommands.clear();
+	std::ifstream file;
+	file.open("Resources/CSV/GroundPiecePop.csv");
+	assert(file.is_open());
+
+	// ファイルの内容を文字列ストリームにコピー
+	groundPopCommands << file.rdbuf();
+
+	// ファイルを閉じる
+	file.close();
+}
+
+void GameScene::UpdateGroundPiecePopCommands() {
+	std::string line;
+
+	// コマンド実行ループ
+	while (getline(groundPopCommands, line)) {
+		std::istringstream line_stream(line);
+
+		std::string word;
+		// 　,区切りで行の先頭文字列を所得
+
+		getline(line_stream, word, ',');
+
+		// "//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			// コメント行を飛ばす
+			continue;
+		}
+
+		// POPコマンド
+		if (word.find("POPPiece") == 0) {
+			// x座標
+			getline(line_stream, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			// y座標
+			getline(line_stream, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			// z座標
+			getline(line_stream, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+			// x座標
+			getline(line_stream, word, ',');
+			float xRot = (float)std::atof(word.c_str());
+
+			// y座標
+			getline(line_stream, word, ',');
+			float yRot = (float)std::atof(word.c_str());
+
+			// z座標
+			getline(line_stream, word, ',');
+			float zRot = (float)std::atof(word.c_str());
+
+			GroundPieceGenerate({x, y, z}, {xRot, yRot, zRot});
+		}
+	}
+}
+
+void GameScene::GroundPieceGenerate(Vector3 position, Vector3 rotation) {
+	// 床モデル配列
+	std::vector<Model*> groundPieceModels = {
+	    modelgroundPiece_.get(),
+	};
+	// アイテムの生成と初期化処理
+	GroundPiece* groundPiece_ = new GroundPiece();
+	groundPiece_->Initialize(groundPieceModels, position, rotation);
+	groundPieces_.push_back(static_cast<std::unique_ptr<GroundPiece>>(groundPiece_));
+}
+
+#pragma endregion
 
 void GameScene::Draw() {
 
@@ -332,9 +503,12 @@ void GameScene::Draw() {
 	//プレイヤー
 	player_->Draw(viewProjection_);
 	//地面
-	
+	for (const std::unique_ptr<Ground>& ground_ : grounds_) {
 		ground_->Draw(viewProjection_);
-	
+	}
+	for (const std::unique_ptr<GroundPiece>& groundPiece_ : groundPieces_) {
+		groundPiece_->Draw(viewProjection_);
+	}
 	//柱
 	pillar_->Draw(viewProjection_);
 	//鍵
@@ -364,7 +538,5 @@ void GameScene::Draw() {
 
 void GameScene::Reset() {
 	LoadKeyPopData();
-		nextFlag_[0] = false;
-		nextFlag_[1] = false;
-	    nextStageKey = 0;
+	nextStageKey = 0;
 }

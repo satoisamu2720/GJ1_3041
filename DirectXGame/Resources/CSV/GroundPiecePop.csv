@@ -1,0 +1,8 @@
+// コマンド,posx,posy,posz,rotx,roty,rotz
+//天井
+POPPiece,0,8,0,0,0.16f,0
+//1層
+POPPiece,0,0,0,0,1.16f,0
+//2層
+POPPiece,0,-8,0,0,2.16f,0
+

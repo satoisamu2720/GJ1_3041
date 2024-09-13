@@ -18,6 +18,7 @@
 #include "player/Player.h"
 #include "camera/FollowCamera.h"
 #include "ground/Ground.h"
+#include "ground_piece/GroundPiece.h"
 #include "pillar/Pillar.h"
 #include "key/KeyItem.h"
 
@@ -67,6 +68,30 @@ public: // メンバ関数
 
 #pragma endregion
 
+#pragma region 床CSV関数
+
+	// 床発生データを読み込み
+	void LoadGroundPopData();
+
+	// 床の発生コマンドの更新
+	void UpdateGroundPopCommands();
+
+	/// 床の生成
+	void GroundGenerate(Vector3 position, Vector3 rotation);
+
+	#pragma region 穴床CSV関数
+
+	// 床発生データを読み込み
+	void LoadGroundPiecePopData();
+
+	// 床の発生コマンドの更新
+	void UpdateGroundPiecePopCommands();
+
+	/// 床の生成
+	void GroundPieceGenerate(Vector3 position, Vector3 rotation);
+
+
+#pragma endregion
 
 
 private: // メンバ変数
@@ -78,16 +103,18 @@ private: // メンバ変数
 	std::list<Player*> players_;
 
 	//床
-	std::unique_ptr<Ground> ground_;
+	std::list < std::unique_ptr<Ground>> grounds_;
+	std::stringstream groundPopCommands;
 	std::unique_ptr<Model> modelGround_;
-	std::list<Ground*> grounds_;
-
-	float openTimer = 0;
-	bool openTimerFlag = false;
-
+	std::list<Ground*> modelGrounds_;
 	bool nextStageFlag = false;
-	
-	
+
+	//穴床
+	std::list<std::unique_ptr<GroundPiece>> groundPieces_;
+	std::stringstream groundPiecePopCommands;
+	std::unique_ptr<Model> modelgroundPiece_;
+	std::list<GroundPiece*> modelGroundPieces_;
+
 	//柱
 	std::unique_ptr<Pillar> pillar_;
 	Model* modelPillar_ = nullptr;
@@ -97,8 +124,6 @@ private: // メンバ変数
 	//発生コマンド
 	std::stringstream keyPopCommands;
 	Model* modelKey_ = nullptr;
-	bool keyFlag_ = false;
-	bool nextFlag_[10] = {false}; 
 	int nextStageKey = 0;
 
 
@@ -122,23 +147,40 @@ private: // メンバ変数
 	float playerBackZ_;
 	float playerRightX_;
 	float playerLeftX_;
+	float playerUpY_;
+	float playerDownY_;
 
 	// 鍵の当たり判定
 	float keyFlontZ_;
 	float keyBackZ_;
 	float keyRightX_;
 	float keyLeftX_;
+	float keyUpY_;
+	float keyDownY_;
 
 	// 床の当たり判定
 	float groundFlontZ_;
 	float groundBackZ_;
 	float groundRightX_;
 	float groundLeftX_;
+	float groundUpY_;
+	float grouudDownY_;
+
+	// 穴床の当たり判定
+	float groundPieceFlontZ_;
+	float groundPieceBackZ_;
+	float groundPieceRightX_;
+	float groundPieceLeftX_;
+	float groundPieceUpY_;
+	float grouudPieceDownY_;
+
 
 	float testFlontZ_;
 	float testBackZ_;
 	float testRightX_;
 	float testLeftX_;
+	float testUpY_;
+	float testDownY_;
 
 
 	/// <summary>

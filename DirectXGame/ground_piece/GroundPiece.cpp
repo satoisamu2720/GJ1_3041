@@ -1,6 +1,6 @@
-#include "Ground.h"
+#include "GroundPiece.h"
 
-void Ground::Initialize(const std::vector<Model*>& models, Vector3 position, Vector3 rotation) {
+void GroundPiece::Initialize(const std::vector<Model*>& models, Vector3 position, Vector3 rotation) {
 	BaseCharacter::Initialize(models);
 
 	worldTransform_.Initialize();
@@ -9,7 +9,7 @@ void Ground::Initialize(const std::vector<Model*>& models, Vector3 position, Vec
 	worldTransform_.translation_ = position;
 }
 
-void Ground::Update() {
+void GroundPiece::Update() {
 	worldTransform_.UpdateMatrix();
 
 #ifdef _DEBUG
@@ -21,9 +21,9 @@ void Ground::Update() {
 #endif
 }
 
-void Ground::Draw(ViewProjection& view) { models_[0]->Draw(worldTransform_, view); }
+void GroundPiece::Draw(ViewProjection& view) { models_[0]->Draw(worldTransform_, view); }
 
-Vector3 Ground::GetWorldPosition() {
+Vector3 GroundPiece::GetWorldPosition() {
 	Vector3 worldPos;
 
 	worldPos.x = worldTransform_.matWorld_.m[3][0];

@@ -197,6 +197,25 @@ private: // メンバ変数
 	float groundPieceUpY_;
 	float grouudPieceDownY_;
 
+	// 壁の当たり判定
+
+	float rightwallBackZ_ ;
+	float rightwallFlontZ_;
+	float rightwallLeftX_ ;
+	float rightwallRightX_ ;
+	float rightwallUpY_ ;
+	float rightwallDownY_;
+	bool rightFalg = false;
+
+
+	float leftwallBackZ_;
+	float leftwallFlontZ_;
+	float leftwallLeftX_;
+	float leftwallRightX_;
+	float leftwallUpY_;
+	float leftwallDownY_;
+	bool lightFalg = false;
+
 
 	float testBackZ_ = 0;
 	float testFlontZ_ = 0;

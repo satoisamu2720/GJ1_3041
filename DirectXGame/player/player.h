@@ -49,7 +49,8 @@ private:
 	int stageCount_ = 0;
 
 	float g = 0.1f;
-
+	bool wallRightFlag = false;
+	bool wallLeftFlag_ = false;
 
 public:
 	// プレイヤー初期化
@@ -71,6 +72,9 @@ public:
 
 	void SetViewProjection(const ViewProjection* viewProjection) { viewProjection_ = viewProjection; }
 	void SetParent(const WorldTransform* parent) { worldTransform_.parent_ = parent; }
+
+	void SetRightWallFlag(bool Flag) { wallRightFlag = Flag; }
+	void SetLeftWallFlag(bool Flag) { wallLeftFlag_ = Flag; }
 
 	~Player();
 

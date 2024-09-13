@@ -30,48 +30,46 @@ void Player::Update() {
 		// 押した方向で移動ベクトルを変更（左右）
 		degree -= playerSpeed;
 		rotf = DirectX::XMConvertToRadians(degree);
-		leftFlag_ = true;
-		worldTransform_.rotation_.y = 0.1f;
-	} else {
-		leftFlag_ = false;
 	}
 	
 	if (joyState.Gamepad.sThumbLX > 100) {
 		degree += playerSpeed;
 		rotf = DirectX::XMConvertToRadians(degree);
-		rightFlag_ = true;
-	} else {
-		rightFlag_ = false;
 	}
 
-	if (input_->PushKey(DIK_LEFT) && leftFlag_ == false && rightFlag_ == false || input_->PushKey(DIK_A) ) {
+	if (input_->PushKey(DIK_LEFT) || input_->PushKey(DIK_A) && wallRightFlag == false) {
 		degree -= playerSpeed;
 		rotf = DirectX::XMConvertToRadians(degree);
-		leftFlag_ = true;
-		
-	} 
-	else {
-		leftFlag_ = false;
+		wallLeftFlag_ = false;
 	}
 
-	if (input_->PushKey(DIK_RIGHT) && leftFlag_ == false && rightFlag_ == false || input_->PushKey(DIK_D)) {
+	if (input_->PushKey(DIK_RIGHT) || input_->PushKey(DIK_D) && wallLeftFlag_ == false) {
 		degree += playerSpeed;
 		rotf = DirectX::XMConvertToRadians(degree);
-		rightFlag_ = true;
-	} else {
-		rightFlag_ = false;
+		wallRightFlag = false;
 	}
+
+	/*if (wallRightFlag) {
+		degree += playerSpeed;
+		rotf = DirectX::XMConvertToRadians(degree);
+	}
+	*/
+	#ifdef _DEBUG
 
 	if (input_->PushKey(DIK_UP) || input_->PushKey(DIK_W)) {
 		move_.y += 0.1f;
-	} 
+	}
 
 	if (input_->PushKey(DIK_DOWN) || input_->PushKey(DIK_S)) {
 		move_.y -= g;
-	} 
-
-	
-	
+	}
+	// GUI表示
+	ImGui::Begin("Player");
+	ImGui::DragFloat3("Player Position", &worldTransform_.translation_.x, 0.01f);
+	ImGui::DragFloat3("Player Rotation", &worldTransform_.rotation_.x, 0.01f);
+	ImGui::Checkbox("Flag", &wallRightFlag);
+	ImGui::End();
+#endif
 
 	move_ = TransformNormal(move_, MakeRotateYmatrix(viewProjection_->rotation_.y));
 	// Y軸周り角度
@@ -88,13 +86,7 @@ void Player::Update() {
 
 	worldTransform_.UpdateMatrix();
 
-#ifdef _DEBUG
-	// GUI表示
-	ImGui::Begin("Player");
-	ImGui::DragFloat3("Player Position", &worldTransform_.translation_.x, 0.01f);
-	ImGui::DragFloat3("Player Rotation", &worldTransform_.rotation_.x, 0.01f);
-	ImGui::End();
-#endif
+
 }
 
 void Player::Draw(ViewProjection& view) {

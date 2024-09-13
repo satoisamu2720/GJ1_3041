@@ -18,6 +18,9 @@ public:
 	const ViewProjection& GetEnemyViewProjection() { return enemyViewProjection_; }
 	Matrix4x4 GetRotateYMatrix_() { return rotateYMatrix_; }
 
+	void SetRightFollllFlag(bool Flag) { wallRightFlag = Flag; }
+	void SetLeftFollFlag(bool Flag) { wallLeftFlag_ = Flag; }
+
 private:
 	const WorldTransform* target_ = nullptr;
 	ViewProjection viewProjection_;
@@ -26,4 +29,7 @@ private:
 	WorldTransform worldTransform_;
 	Input* input_ = nullptr;
 	Matrix4x4 rotateYMatrix_;
+
+	bool wallRightFlag = false;
+	bool wallLeftFlag_ = false;
 };

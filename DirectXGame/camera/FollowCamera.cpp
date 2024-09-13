@@ -19,11 +19,14 @@ void FollowCamera::Update() {
 
 		 float kRotSpeed = 0.01f;
 
-		if (input_->PushKey(DIK_D)) {
+		if (input_->PushKey(DIK_D) && wallLeftFlag_ == false) {
 			 viewProjection_.rotation_.y -= kRotSpeed;
+			wallRightFlag = false;
 		} 
-		if (input_->PushKey(DIK_A)) {
+		if (input_->PushKey(DIK_A) && wallRightFlag == false) {
 			 viewProjection_.rotation_.y += kRotSpeed;
+			wallLeftFlag_ = false;
+			
 		}
 
 		if (viewProjection_.rotation_.y > 3.14f) {

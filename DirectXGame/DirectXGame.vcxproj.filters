@@ -73,6 +73,9 @@
     <Filter Include="key">
       <UniqueIdentifier>{668ab2fa-8606-403e-a42e-282bbbf0d2b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="wall">
+      <UniqueIdentifier>{4649cd74-2981-4510-a5bb-0e11f921ca73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -113,6 +116,12 @@
     </ClCompile>
     <ClCompile Include="key\KeyItem.cpp">
       <Filter>key</Filter>
+    </ClCompile>
+    <ClCompile Include="ground_piece\GroundPiece.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="wall\Wall.cpp">
+      <Filter>wall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +232,12 @@
     </ClInclude>
     <ClInclude Include="key\KeyItem.h">
       <Filter>key</Filter>
+    </ClInclude>
+    <ClInclude Include="ground_piece\GroundPiece.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="wall\Wall.h">
+      <Filter>wall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

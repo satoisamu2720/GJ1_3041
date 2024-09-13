@@ -21,6 +21,7 @@
 #include "ground_piece/GroundPiece.h"
 #include "pillar/Pillar.h"
 #include "key/KeyItem.h"
+#include "Wall/Wall.h"
 
 /// <summary>
 /// ゲームシーン
@@ -93,6 +94,19 @@ public: // メンバ関数
 
 #pragma endregion
 
+		#pragma region 壁CSV関数
+
+	// 床発生データを読み込み
+	void LoadWallPopData();
+
+	// 床の発生コマンドの更新
+	void UpdateWallPopCommands();
+
+	/// 床の生成
+	void WallGenerate(Vector3 position, Vector3 rotation);
+
+#pragma endregion
+
 
 private: // メンバ変数
 
@@ -122,6 +136,11 @@ private: // メンバ変数
 	//柱
 	std::unique_ptr<Pillar> pillar_;
 	Model* modelPillar_ = nullptr;
+
+	// 壁
+	std::list < std::unique_ptr<Wall>> walls_;
+	std::stringstream wallPopCommands;
+	Model* modelWall_ = nullptr;
 
 	//鍵
 	std::list<std::unique_ptr<KeyItem>> keys_;

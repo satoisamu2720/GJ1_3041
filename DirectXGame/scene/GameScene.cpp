@@ -65,6 +65,13 @@ void GameScene::Initialize() {
 
 #pragma endregion
 
+#pragma region 壁初期化
+
+	modelWall_ = (Model::CreateFromOBJ("wall", true));
+	LoadWallPopData();
+
+#pragma endregion
+	
 
 #pragma region 鍵初期化
 
@@ -120,6 +127,9 @@ void GameScene::Update() {
 	}
 	// 柱
 	pillar_->Update();
+	for (const std::unique_ptr<Wall>& wall_ : walls_) {
+		wall_->Update();
+	}
 	// 鍵
 	for (const std::unique_ptr<KeyItem>& key_ : keys_) {
 		key_->Update();
@@ -212,10 +222,11 @@ void GameScene::Update() {
 
 		if ((playerLeftX_ < groundPieceRightX_ && playerRightX_ > groundPieceLeftX_) 
 			&& (groundPieceFlontZ_ > playerBackZ_ && groundPieceBackZ_ < playerFlontZ_) 
-			&&(playerUpY_ > grouudPieceDownY_ && playerDownY_ < groundPieceUpY_) && nextStageKey >= 1) {
+			&&
+		    (playerUpY_ > grouudPieceDownY_ && playerDownY_ < groundPieceUpY_) && nextStage >= nextStageKey) {
 			nextStageFlag = true;
 		}
-		if (nextStageFlag && nextStageKey == nextStage) {
+		if (nextStageFlag) {
 			timerFlag = true;
 			Vector3 tmpTranslate = player_->GetWorldPosition();
 			tmpTranslate.y -= 0.1f;
@@ -287,6 +298,19 @@ void GameScene::Update() {
 
 	// 床のCSVファイルの更新処理
 	UpdateGroundPiecePopCommands();
+
+	// デスフラグの立った敵を削除
+	walls_.remove_if([](std::unique_ptr<Wall>& item) {
+		if (item->IsDead()) {
+			item.release();
+			return true;
+		}
+		return false;
+	});
+
+	// 床のCSVファイルの更新処理
+	UpdateWallPopCommands();
+
 
 #pragma endregion
 }
@@ -430,7 +454,7 @@ void GameScene::GroundGenerate(Vector3 position, Vector3 rotation) {
 
 #pragma endregion
 
-#pragma region 床 CSV
+#pragma region 穴床 CSV
 
 void GameScene::LoadGroundPiecePopData() {
 	groundPiecePopCommands.clear();
@@ -507,6 +531,79 @@ void GameScene::GroundPieceGenerate(Vector3 position, Vector3 rotation) {
 
 #pragma endregion
 
+#pragma region 壁 CSV
+
+void GameScene::LoadWallPopData() {
+	wallPopCommands.clear();
+	std::ifstream file;
+	file.open("Resources/CSV/WallPop.csv");
+	assert(file.is_open());
+
+	// ファイルの内容を文字列ストリームにコピー
+	wallPopCommands << file.rdbuf();
+
+	// ファイルを閉じる
+	file.close();
+}
+
+void GameScene::UpdateWallPopCommands() {
+	std::string line;
+
+	// コマンド実行ループ
+	while (getline(wallPopCommands, line)) {
+		std::istringstream line_stream(line);
+
+		std::string word;
+		// 　,区切りで行の先頭文字列を所得
+
+		getline(line_stream, word, ',');
+
+		// "//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			// コメント行を飛ばす
+			continue;
+		}
+
+		// POPコマンド
+		if (word.find("POP") == 0) {
+			// x座標
+			getline(line_stream, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			// y座標
+			getline(line_stream, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			// z座標
+			getline(line_stream, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+			// x座標
+			getline(line_stream, word, ',');
+			float xRot = (float)std::atof(word.c_str());
+
+			// y座標
+			getline(line_stream, word, ',');
+			float yRot = (float)std::atof(word.c_str());
+
+			// z座標
+			getline(line_stream, word, ',');
+			float zRot = (float)std::atof(word.c_str());
+
+			WallGenerate({x, y, z}, {xRot, yRot, zRot});
+		}
+	}
+}
+
+void GameScene::WallGenerate(Vector3 position, Vector3 rotation) {
+
+	// アイテムの生成と初期化処理
+	Wall* wall_ = new Wall();
+	wall_->Initialize(modelWall_, position, rotation);
+	walls_.push_back(static_cast<std::unique_ptr<Wall>>(wall_));
+}
+
+#pragma endregion
 void GameScene::Draw() {
 
 	// コマンドリストの取得
@@ -551,7 +648,9 @@ void GameScene::Draw() {
 	for (const std::unique_ptr<KeyItem>& key_ : keys_) {
 		key_->Draw(viewProjection_);
 	}
-
+	for (const std::unique_ptr<Wall>& wall_ : walls_) {
+		wall_->Draw(viewProjection_);
+	}
 
 	Model::PostDraw();
 #pragma endregion

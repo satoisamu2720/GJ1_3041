@@ -120,6 +120,7 @@
     <ClCompile Include="pillar\Pillar.cpp" />
     <ClCompile Include="player\Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="wall\Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="2d\ImGuiManager.h" />
@@ -159,6 +160,7 @@
     <ClInclude Include="pillar\Pillar.h" />
     <ClInclude Include="player\Player.h" />
     <ClInclude Include="scene\GameScene.h" />
+    <ClInclude Include="wall\Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\TerrainPS.hlsl">
